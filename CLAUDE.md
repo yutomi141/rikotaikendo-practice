@@ -16,7 +16,7 @@
 
 ## 開発ルール
 
-- `main` に直接 push しない。`feat/内容` のようなブランチを切って PR を出し、先輩のレビューを受けてからマージする
+- `main` に直接 push しない。`feat/内容` のようなブランチを切って PR を出し、三角のレビューを受けてからマージする
 - コミットメッセージは Conventional Commits、本文は日本語（例: `feat: FAQ ページを追加`）
 - 環境: Windows + Git Bash + VS Code + Node.js（LTS）
 
