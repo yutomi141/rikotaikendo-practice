@@ -1,0 +1,616 @@
+\chapter{コマンド早見表}
+
+\section*{ターミナル（Git Bash）}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily}l X}
+\toprule
+\normalfont コマンド & すること \\
+\midrule
+pwd & いま居る場所を表示 \\
+ls / ls -a & 中身の一覧／隠しファイルも含めた一覧 \\
+cd 場所 / cd .. / cd & 移動／1つ上へ／ホームへ \\
+mkdir 名前 & フォルダを作る \\
+touch 名前 & 空のファイルを作る \\
+cat ファイル & 中身を表示 \\
+cp 元 先 / mv 元 先 & コピー／移動・名前変更 \\
+rm ファイル & 削除（ゴミ箱に入らない） \\
+code . / explorer . & VS Code／エクスプローラーで開く \\
+clear & 画面をきれいにする \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{Git}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily}l X}
+\toprule
+\normalfont コマンド & すること \\
+\midrule
+git init & ここで Git の管理を始める \\
+git status & いまの状態を見る（迷ったらこれ） \\
+git add ファイル & 変更を準備エリアに入れる \\
+git commit -m "メッセージ" & 記録する \\
+git push & GitHub に送る（初回は \code{git push -u origin main}） \\
+git pull & GitHub の変更を取り込む \\
+git clone アドレス & GitHub のリポジトリを丸ごと手元にコピーする \\
+git diff & まだ add していない変更を見る \\
+git diff --staged & add 済みの変更を見る \\
+git log --oneline & 履歴を1行ずつ見る（\code{q} で抜ける） \\
+git restore ファイル & add 前の変更を取り消す \\
+git restore --staged ファイル & 準備エリアから外す \\
+git commit --amend -m "..." & 直前のコミットを直す（push 前だけ） \\
+git remote -v & つながっている GitHub のアドレスを見る \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{Claude Code}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily}l X}
+\toprule
+\normalfont 入力 & すること \\
+\midrule
+claude & 起動（作業したいリポジトリで） \\
+/clear & 会話をリセット \\
+/compact & 会話を要約して軽くする \\
+/status & ログイン状態・使用量 \\
+/exit & 終了 \\
+\normalfont\key{Esc} / \key{Esc}×2 & 作業を止める／前の発言に戻る \\
+\normalfont\key{Shift}+\key{Tab} & モード切り替え（plan mode など） \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{Node.js}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily}l X}
+\toprule
+\normalfont コマンド & すること \\
+\midrule
+node -v / npm -v & バージョンを確認 \\
+node ファイル.js & JavaScript のファイルを実行 \\
+npx serve . & いまのフォルダを \code{localhost:3000} で表示 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\chapter{エラー逆引き}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily\raggedright\arraybackslash}p{5.6cm} X l}
+\toprule
+\normalfont 表示（の一部） & 原因と対処 & 本文 \\
+\midrule
+command not found & そのコマンドが入っていない／PATH が通っていない。ターミナルを開き直す & 3章 \\
+\addlinespace
+'irm' is not recognized & PowerShell ではなく CMD で打っている & 3章 \\
+\addlinespace
+Permission denied (publickey) & SSH 鍵が GitHub に未登録。\code{ssh -T git@github.com} で確認 & 3・5章 \\
+\addlinespace
+Please tell me who you are & \code{user.name}／\code{user.email} が未設定 & 3章 \\
+\addlinespace
+not a git repository & Git の管理外のフォルダにいる。\code{pwd} で確認 & 5章 \\
+\addlinespace
+nothing to commit & 変更がない。保存し忘れていないか & 5章 \\
+\addlinespace
+! [rejected] (fetch first) & GitHub 側が進んでいる。\code{git pull} してから push & 5章 \\
+\addlinespace
+このシステムではスクリプトの実行が無効 & PowerShell の安全機能。npm は Git Bash で打つ & 3章 \\
+\addlinespace
+X is not defined & 変数名の打ち間違い（大文字・小文字も） & 8章 \\
+\addlinespace
+Cannot read properties of null & \code{querySelector} で要素が見つからない & 8章 \\
+\addlinespace
+Cannot read properties of undefined & 配列の範囲外や、存在しない名前を読んだ & 8章 \\
+\addlinespace
+Unexpected token & かっこやカンマの過不足 & 8章 \\
+\addlinespace
+\normalfont（画像が表示されない） & パスや大文字・小文字の違い。開発者ツールの Network タブで赤い行を探す & 7章 \\
+\addlinespace
+\normalfont（GitHub Pages が 404） & \code{index.html} の名前と置き場所、Actions タブを確認 & 7章 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\chapter{用語集}
+
+\begin{description}[font=\sffamily\bfseries,leftmargin=0pt,itemsep=3pt]
+  \item[API キー] 外部サービスを使うための合言葉。秘密情報なので Git に入れない
+  \item[CLI／GUI] 文字で操作する画面／マウスで操作する画面
+  \item[CSS] Web ページの見た目を決める言葉
+  \item[DOM] ブラウザが HTML を読み込んで作る「木」の形のデータ。JavaScript はこれを操作する
+  \item[Flexbox] CSS で要素を横（または縦）に並べる仕組み
+  \item[GitHub Pages] GitHub のリポジトリを、そのまま Web サイトとして公開する機能
+  \item[HTML] Web ページの中身と構造を書く言葉
+  \item[localhost] 自分の PC を指す名前
+  \item[Markdown] \code{\#} で見出し、\code{-} で箇条書き、のように記号で書式を付ける書き方
+  \item[Node.js] ブラウザの外で JavaScript を動かす道具
+  \item[npm／npx] Node.js の道具（パッケージ）を入れる／その場で実行する仕組み
+  \item[PATH] コマンドを探しに行くフォルダの一覧
+  \item[SSH 鍵] パスワードの代わりに本人確認をするための鍵の組（秘密鍵と公開鍵）
+  \item[コミット] Git の記録の単位。「セーブ」に近い
+  \item[コンソール] 開発者ツールの中の、JavaScript を打ち込める場所。エラーもここに出る
+  \item[差分（diff）] 変更前と変更後の違い
+  \item[作業場（ワーキングツリー）] いま編集しているファイルがある場所
+  \item[準備エリア（ステージ）] 次のコミットに入れる予定の変更を置く場所
+  \item[セレクタ] CSS で「どの要素に」効かせるかを指定する部分
+  \item[ターミナル] 文字でコンピュータに命令する画面。この教材では Git Bash
+  \item[デプロイ] 作ったものを、インターネットで見られる状態にすること
+  \item[ブランチ] 履歴の枝分かれ。第2巻で使う
+  \item[フレームワーク] Web アプリを作るための土台一式。Next.js など
+  \item[プロンプト] (1) ターミナルの \code{\$} の部分 (2) AI への指示文
+  \item[ポート番号] PC の中の「窓口の番号」。\code{localhost:3000} の \code{3000}
+  \item[メディアクエリ] 画面の幅などの条件で、CSS を切り替える書き方
+  \item[リポジトリ] Git で管理しているフォルダ（とその履歴）
+  \item[リモート／origin] GitHub 側のリポジトリ／そのあだ名
+  \item[レスポンシブ] 画面の大きさに合わせてレイアウトが変わること
+\end{description}
+
+\chapter{練習問題の解答例}
+
+解答は一例です。違う書き方でも、条件を満たしていれば正解です。
+自分の答えと違ったら、「どちらが読みやすいか」「なぜその書き方なのか」を考えてみてください。
+
+\section*{第7章}
+
+\subsection*{練習 7.1　見出しの階層}
+\begin{Piton}[language=code]
+<h1>理工体剣道部の一年</h1>
+<h2>春</h2>
+<h3>新歓</h3>
+<p>新入生の体験稽古を行う。</p>
+<h3>早慶戦</h3>
+<p>伝統の一戦。</p>
+<h2>夏</h2>
+<h3>夏合宿</h3>
+<p>4泊5日で鍛える。</p>
+\end{Piton}
+見た目の大きさではなく、\textbf{話の階層}で見出しの番号を選びます。大きさは CSS で変えられます。
+
+\subsection*{練習 7.2　外部リンク}
+\begin{Piton}[language=code]
+<p>部の Instagram は<a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">こちら</a></p>
+\end{Piton}
+\code{target="\_blank"} で新しいタブが開きます。\code{rel="noopener noreferrer"} は、開いた先のページから元のページを操作されないようにする安全のための設定です。
+
+\subsection*{練習 7.3　画像と代わりの文章}
+\begin{Piton}[language=code]
+<img src="images/hero.jpg" alt="稽古の後に体育館で撮った部員の集合写真" width="300">
+\end{Piton}
+\code{alt} は、画像が表示できないときや読み上げソフトで読まれる文章です。「画像」「写真」とだけ書くのではなく、何が写っているかを書きます。
+
+\subsection*{練習 7.4　持ち物リスト}
+\begin{Piton}[language=code]
+<h3>体験稽古の持ち物</h3>
+<ul>
+  <li>動きやすい服装</li>
+  <li>タオル</li>
+  <li>飲み物</li>
+  <li>上履き（体育館用）</li>
+</ul>
+<h3>入部までの流れ</h3>
+<ol>
+  <li>見学する</li>
+  <li>体験稽古に出る</li>
+  <li>入部届を出す</li>
+</ol>
+\end{Piton}
+順番に意味がないものは \code{ul}、順番に意味があるものは \code{ol} を使います。
+
+\subsection*{練習 7.5　年間行事の表}
+\begin{Piton}[language=code]
+<table>
+  <thead>
+    <tr><th>月</th><th>行事</th><th>区分</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>4月</td><td>新歓・体験稽古</td><td>イベント</td></tr>
+    <tr><td>6月</td><td>早慶戦</td><td>試合</td></tr>
+    <tr><td>8月</td><td>夏合宿</td><td>合宿</td></tr>
+    <tr><td>3月</td><td>春合宿</td><td>合宿</td></tr>
+  </tbody>
+</table>
+\end{Piton}
+
+\subsection*{練習 7.6　間違い探し}
+\begin{enumerate}
+  \item \code{<h2>稽古について<h2>}：終了タグの \code{/} がない → \code{</h2>}
+  \item \code{<strong>週4回</p></strong>}：閉じる順番が逆。後に開いたものから先に閉じる → \code{<strong>週4回</strong></p>}
+  \item \code{<ul>} の中に \code{<p>}：\code{ul} の直下には \code{li} しか置けない → \code{<li>火曜日</li>}
+  \item \code{<img>} に \code{alt} がない → \code{alt="..."} を付ける
+\end{enumerate}
+ブラウザは間違った HTML でもなんとか表示しようとするので、見た目では気づきにくいのが厄介なところです。
+
+\subsection*{練習 7.7　問い合わせフォーム}
+\begin{Piton}[language=code]
+<form>
+  <label for="name">名前</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="email">メールアドレス</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="message">問い合わせ内容</label>
+  <textarea id="message" name="message" rows="5"></textarea>
+
+  <button type="submit">送信する</button>
+</form>
+\end{Piton}
+\code{label} の \code{for} と \code{input} の \code{id} を同じ値にすると、ラベルを押したときに入力欄が選ばれます。
+\code{type="email"} でメールの形のチェック、\code{required} で空欄のチェックをブラウザがしてくれます。
+ただし、これは\textbf{ブラウザ側のチェックにすぎず、悪意のある人は簡単にすり抜けられます}。
+第4巻で、サーバー側でもチェックする理由を学びます。
+
+\subsection*{練習 7.8　サイトの色を一気に変える}
+\begin{Piton}[language=code]
+:root {
+  --color-kon: #1e4d3a;
+  --color-shu: #b8860b;
+  --color-bg: #f6f7f9;
+  --color-text: #2b2b2b;
+}
+\end{Piton}
+CSS 変数を使うと、\textbf{色を変えたいときに直す場所が1か所で済み、直し忘れが起きません}。
+
+\subsection*{練習 7.9　セレクタはどれに効く？}
+赤くなるのは「新歓稽古を行います。」と「雨天でも実施します。」の2つです。
+\begin{itemize}
+  \item \code{.news p}：\code{.news} の中の \code{p} すべて。\code{class="important"} が付いていても \code{p} なので当てはまる
+  \item \code{\#top}：\code{id="top"} の要素はないので、どこにも効かない
+  \item \code{h3}：\code{h3} はないので、どこにも効かない
+  \item \code{section} の外の \code{p.important} は、\code{.news} の中ではないので赤くならない
+\end{itemize}
+
+\subsection*{練習 7.10　箱の幅を計算する}
+\begin{enumerate}
+  \item 指定なし：中身 300 ＋ 左右の padding 20×2 ＋ 左右の枠線 2×2 ＝ \textbf{344px}
+  \item \code{border-box}：padding と枠線が 300px の中に含まれるので \textbf{300px}
+\end{enumerate}
+どちらの場合も、margin（10px）は箱の外側の余白なので、横幅には含みません（となりとの間隔になります）。
+開発者ツールの \menu{Computed} タブに、この箱の図と数字が表示されます。
+
+\subsection*{練習 7.11　ボタンに反応をつける}
+\begin{Piton}[language=code]
+.button {
+  /* もとの指定はそのまま。この1行を足す */
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #8f3424;
+}
+\end{Piton}
+
+\subsection*{練習 7.12　フッターを3列にする}
+\begin{Piton}[language=code]
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <p class="footer-title">理工体剣道部</p>
+      <p>慶應義塾大学 理工学部體育會剣道部</p>
+    </div>
+    <div>
+      <p class="footer-title">稽古場所</p>
+      <p>矢上キャンパス 体育館</p>
+    </div>
+    <div>
+      <p class="footer-title">SNS</p>
+      <p><a href="https://www.instagram.com/">Instagram</a></p>
+    </div>
+  </div>
+</footer>
+\end{Piton}
+\begin{Piton}[language=code]
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.footer-title {
+  font-weight: bold;
+}
+
+.site-footer a {
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+  }
+}
+\end{Piton}
+
+\subsection*{練習 7.13　どちらの CSS が勝つ？}
+\textbf{緑}になります。
+同じ要素に複数のルールが当たったとき、より「具体的な」セレクタが勝ちます。これを\term{詳細度}といいます。
+おおまかには「id の数 → class の数 → タグの数」の順に比べます。
+\begin{center}\small
+\begin{tabular}{lccc}\toprule
+セレクタ & id & class & タグ \\\midrule
+\code{\#main-title} & 1 & 0 & 0 \\
+\code{h2.title} & 0 & 1 & 1 \\
+\code{.title} & 0 & 1 & 0 \\\bottomrule
+\end{tabular}
+\end{center}
+\code{.title} を勝たせるには、それ以上に具体的にします。たとえば \code{\#main-title.title \{ color: red; \}} は id 1・class 1 なので勝ちます。
+ただし、詳細度の競争を始めるとどんどん読みにくくなるので、\textbf{そもそも id で見た目を付けない}のが一番の対策です。
+
+\subsection*{練習 7.14　タブレットでは2列にする}
+\begin{Piton}[language=code]
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.card {
+  /* 3枚並べる：全体から隙間2つ分を引いて3等分 */
+  flex: 0 0 calc((100% - 32px) / 3);
+}
+
+@media (max-width: 960px) {
+  .card {
+    flex-basis: calc((100% - 16px) / 2);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    flex-basis: 100%;
+  }
+}
+\end{Piton}
+もとの \code{@media (max-width: 640px)} の中の \code{.cards \{ flex-direction: column; \}} は、消しても同じ見た目になります。
+
+\subsection*{練習 7.15　開発者ツールで原因を探す}
+\begin{enumerate}
+  \item \menu{Elements} で \code{h2} を選ぶと、右の \menu{Styles} に \code{.section h2} のルールが出ます。右上に \code{style.css:行番号} と表示され、そこに \code{border-left: 6px solid var(--color-shu);} があります
+  \item \code{6px} をクリックして \code{12px} に変えると、線が太くなります
+  \item 再読み込みすると 6px に戻ります。開発者ツールでの変更は、ファイルには保存されません
+\end{enumerate}
+
+\subsection*{練習 7.16　見本を再現する}
+\begin{Piton}[language=code]
+<section class="section">
+  <h2>数字で見る剣道部</h2>
+  <div class="stats">
+    <div class="stat"><p class="stat-number">52</p><p class="stat-label">部員数</p></div>
+    <div class="stat"><p class="stat-number">4</p><p class="stat-label">週の稽古回数</p></div>
+    <div class="stat"><p class="stat-number">2</p><p class="stat-label">年間の合宿</p></div>
+    <div class="stat"><p class="stat-number">70</p><p class="stat-label">初心者・リバ剣の割合（%）</p></div>
+  </div>
+</section>
+\end{Piton}
+\begin{Piton}[language=code]
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.stat {
+  padding: 16px;
+  text-align: center;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.stat-number {
+  margin: 0;
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--color-shu);
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 12px;
+  color: #888;
+}
+
+@media (max-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+\end{Piton}
+
+\section*{第8章}
+
+\subsection*{練習 8.1　稽古の合計時間}
+\begin{Piton}[language=code]
+const minutesPerPractice = 120;
+const practicesPerWeek = 4;
+const weeks = 15;
+
+const total = minutesPerPractice * practicesPerWeek * weeks;
+console.log(`前期の稽古時間は ${total} 分`);   // → 7200 分
+\end{Piton}
+数字に名前をつけておくと、あとで読んだときに「120 って何だっけ」とならずに済みます。
+
+\subsection*{練習 8.2　型を当てる}
+\begin{Piton}[language=code]
+typeof "4"          // "string"
+typeof 4            // "number"
+"4" + 4             // "44"   文字列があると、+ は「つなげる」になる
+4 + 4               // 8
+"4" === 4           // false  型が違う
+Number("4") === 4   // true
+\end{Piton}
+
+\subsection*{練習 8.3　技の配列}
+\begin{Piton}[language=code]
+const waza = ["面", "小手", "胴"];
+
+waza.push("突き");
+console.log(waza, waza.length);          // → ["面","小手","胴","突き"] 4
+
+console.log(waza[1]);                    // → 小手
+
+console.log(waza[waza.length - 1]);      // → 突き
+\end{Piton}
+\code{const} で作った配列でも、\code{push} で中身を足すことはできます。\code{const} が禁止しているのは「箱ごと入れ替えること」だけです。
+
+\subsection*{練習 8.4　自分のプロフィール}
+\begin{Piton}[language=code]
+const me = {
+  name: "柴山",
+  grade: 2,
+  department: "応用化学科",
+  favoriteWaza: "出小手",
+};
+
+console.log(`${me.department}${me.grade}年の${me.name}です。好きな技は${me.favoriteWaza}です。`);
+\end{Piton}
+
+\subsection*{練習 8.5　分を「時間と分」に直す関数}
+\begin{Piton}[language=code]
+function formatMinutes(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours}時間${minutes}分`;
+}
+
+// 0 の部分を省略する版
+function formatMinutesShort(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes}分`;
+  if (minutes === 0) return `${hours}時間`;
+  return `${hours}時間${minutes}分`;
+}
+
+console.log(formatMinutes(150));        // → 2時間30分
+console.log(formatMinutesShort(60));    // → 1時間
+console.log(formatMinutesShort(45));    // → 45分
+\end{Piton}
+
+\subsection*{練習 8.6　上級生と下級生}
+\begin{Piton}[language=code]
+function gradeLabel(grade) {
+  if (grade === 1) {
+    return "新入生";
+  } else if (grade === 2) {
+    return "中堅";
+  } else if (grade >= 3) {
+    return "上級生";
+  } else {
+    return "学年が正しくありません";
+  }
+}
+
+[1, 2, 3, 4, 0].forEach((g) => console.log(g, gradeLabel(g)));
+\end{Piton}
+
+\subsection*{練習 8.7　段位を持っている人}
+\begin{Piton}[language=code]
+const withDan = members.filter((member) => member.dan !== "無");
+console.log(withDan.length);
+withDan.forEach((member) => console.log(member.name));
+\end{Piton}
+
+\subsection*{練習 8.8　さん付けの名簿}
+\begin{Piton}[language=code]
+const roster = members.map((member) => `${member.name}さん（${member.grade}年）`);
+console.log(roster);
+console.log(roster.join("\n"));
+\end{Piton}
+\code{\textbackslash n} は改行を表す特別な文字です。
+
+\subsection*{練習 8.9　学年ごとの人数}
+\begin{Piton}[language=code]
+const counts = {};
+
+members.forEach((member) => {
+  // まだその学年の数を数えていなければ 0 から始める
+  if (counts[member.grade] === undefined) {
+    counts[member.grade] = 0;
+  }
+  counts[member.grade] = counts[member.grade] + 1;
+});
+
+console.log(counts);   // → { '1': 2, '2': 2, '3': 2 }
+\end{Piton}
+オブジェクトの名前（キー）を、\code{counts[member.grade]} のように変数で指定しているのがポイントです。
+この「グループごとに数える」処理は、第3巻の SQL の \code{GROUP BY} でもう一度出てきます。
+
+\subsection*{練習 8.10　素振りカウンター}
+\begin{Piton}[language=code]
+<p class="count">0</p>
+<button class="plus">素振り +1</button>
+<button class="reset">リセット</button>
+
+<style>
+  .count.is-goal { color: #b5422e; font-weight: bold; }
+</style>
+
+<script>
+  const GOAL = 100;
+  const countText = document.querySelector(".count");
+  let count = 0;
+
+  function update() {
+    countText.textContent = count;
+    if (count >= GOAL) {
+      countText.classList.add("is-goal");
+    } else {
+      countText.classList.remove("is-goal");
+    }
+  }
+
+  document.querySelector(".plus").addEventListener("click", () => {
+    count = count + 1;
+    update();
+  });
+
+  document.querySelector(".reset").addEventListener("click", () => {
+    count = 0;
+    update();
+  });
+</script>
+\end{Piton}
+\code{count} はあとで値を入れ直すので \code{let}、目標の 100 は変えないので \code{const} です。
+
+\subsection*{練習 8.11　名前で検索する}
+\begin{Piton}[language=code]
+<!-- index.html：部員紹介の .filter の下に足す -->
+<input type="text" class="member-search" placeholder="名前で検索">
+\end{Piton}
+\begin{Piton}[language=code]
+// script.js：一番最後に足す
+const searchInput = document.querySelector(".member-search");
+
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.trim();
+  const shown = members.filter((member) => member.name.includes(keyword));
+
+  memberList.innerHTML = shown
+    .map((member) => `<li class="member"><strong>${member.name}</strong><br>${member.grade}年・${member.dan}</li>`)
+    .join("");
+  memberCount.textContent = `${shown.length}人`;
+});
+\end{Piton}
+この解答では、学年のボタンと検索欄が別々に動きます（検索すると学年の絞り込みが無視される）。
+両方を同時に効かせる方法は、本章の腕だめしで考えます。
+
+\subsection*{練習 8.12　バグを直す}
+\begin{Piton}[language=code]
+const list = document.querySelector(".member-list");   // ① lsit → list
+
+const grade = 2;                                       // ② 文字列 "2" ではなく数値 2
+
+const second = members.filter((member) => member.grade === grade);
+
+list.innerHTML = second.map((member) => `<li>${member.name}</li>`).join("");   // ③ nmae → name
+\end{Piton}
+\begin{enumerate}
+  \item クラス名の打ち間違いで要素が見つからず、\code{list} が \code{null} になっていた（\code{Cannot read properties of null}）
+  \item \code{member.grade} は数値なので、文字列の \code{"2"} とは \code{===} で一致せず、誰も残らなかった（エラーは出ないので一番気づきにくい）
+  \item 存在しない \code{nmae} を読んだため、名前が \code{undefined} と表示されていた
+\end{enumerate}
+②のように、\textbf{エラーが出ないのに結果がおかしい}バグが一番やっかいです。
+「何人残ったか」を \code{console.log(second.length)} で確かめるなど、途中の値を表示して追いかけるのが基本です。

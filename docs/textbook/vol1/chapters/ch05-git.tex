@@ -1,0 +1,293 @@
+\chapter{Git と GitHub の基本}
+\sheet{5-1〜5-6}
+
+\section{Git がないと何が困るか}
+
+レポートを書いていて、こんなファイルが並んだことはありませんか。
+
+\begin{center}\ttfamily\small
+\begin{tabular}{l}
+レポート.docx\\
+レポート\_修正.docx\\
+レポート\_修正2.docx\\
+レポート\_最終版.docx\\
+レポート\_最終版\_v2\_本当に最終.docx
+\end{tabular}
+\end{center}
+
+どれが最新なのか、何を変えたのか、どこで壊れたのかが分からなくなります。
+これを人数分・ファイル数百個分でやるのが Web 開発です。
+\term{Git}（ギット）は、ファイルを上書きしながら、\textbf{いつ・誰が・何を・なぜ変えたか}を全部記録してくれる道具です。
+
+\section{Git の3つの場所}
+
+Git を使うとき、ファイルは次の4つの場所を行き来します。最初はこの図だけ覚えれば十分です。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\small,
+  area/.style={draw,rounded corners=3pt,minimum width=2.9cm,minimum height=2.3cm,align=center,fill=white},
+  arr/.style={-{Stealth[length=2.5mm]},thick}]
+  \node[area,draw=kincha] (w) {\textbf{作業場}\\{\scriptsize ワーキングツリー}\\[3pt]{\scriptsize いま編集している}\\{\scriptsize ファイル}};
+  \node[area,draw=kon,right=1.1cm of w] (s) {\textbf{準備エリア}\\{\scriptsize ステージ}\\[3pt]{\scriptsize 次に記録する}\\{\scriptsize 予定のもの}};
+  \node[area,draw=matcha,right=1.1cm of s] (r) {\textbf{記録}\\{\scriptsize ローカルリポジトリ}\\[3pt]{\scriptsize 自分の PC の}\\{\scriptsize 履歴}};
+  \node[area,draw=gray,right=1.1cm of r] (g) {\textbf{GitHub}\\{\scriptsize リモートリポジトリ}\\[3pt]{\scriptsize クラウドの}\\{\scriptsize 履歴}};
+  \draw[arr,kincha] (w) -- node[above,font=\ttfamily\scriptsize]{add} (s);
+  \draw[arr,kon] (s) -- node[above,font=\ttfamily\scriptsize]{commit} (r);
+  \draw[arr,matcha] (r) -- node[above,font=\ttfamily\scriptsize]{push} (g);
+  \draw[arr,gray] (g.south) to[bend left=25] node[below,font=\ttfamily\scriptsize]{pull / clone} (w.south);
+  \node[draw=gray!50,dashed,rounded corners,fit=(w)(s)(r),inner sep=6pt,label={[font=\scriptsize]above:あなたの PC（ローカル）}] {};
+\end{tikzpicture}
+\end{center}
+
+\begin{description}[font=\sffamily\bfseries]
+  \item[add] 「このファイルの変更を次の記録に入れる」と選ぶ
+  \item[commit] 選んだ変更を、メッセージ付きで1つの記録（\term{コミット}）にする。ゲームのセーブに近い
+  \item[push] 自分の PC にある記録を GitHub に送る
+  \item[pull / clone] GitHub にある記録を自分の PC に持ってくる
+\end{description}
+
+\begin{why}[なぜ add と commit が分かれているのか]
+1回の作業で「トップページの文言修正」と「FAQ の追加」を同時にやってしまったとします。
+add で文言修正のファイルだけを選んで commit し、次に FAQ のファイルを選んで commit すれば、
+\textbf{1つのコミットに1つの意味}を持たせられます。
+あとで「FAQ の追加だけ取り消したい」となったときに、これが効いてきます。
+\end{why}
+
+\section{はじめてのリポジトリ}
+
+\begin{step}{GitHub にリポジトリを作る}
+\sheet{5-2}
+\url{https://github.com/new} を開き、次のように入力して \btn{Create repository} を押します。
+\screenshot[0.85]{github-new-repo.jpg}
+\begin{itemize}
+  \item \menu{Repository name}：\code{git-practice}
+  \item \menu{Choose visibility}：\textbf{Public}
+  \item \menu{Add README}：\textbf{Off のまま}（README は自分で作るため）
+\end{itemize}
+作ると、\code{…or push an existing repository from the command line} という説明が出た画面になります。
+この画面は開いたままにしておきます。
+\end{step}
+
+\begin{step}{ローカルにリポジトリを作る}
+\begin{terminal}[Git Bash]
+$ cd ~/dev
+$ mkdir git-practice
+$ cd git-practice
+$ git init
+Initialized empty Git repository in C:/Users/ryusei/dev/git-practice/.git/
+$ ls -a
+.  ..  .git
+\end{terminal}
+\code{.git} という隠しフォルダが、Git の記録帳です。\textbf{このフォルダは手で触らないでください。}
+\end{step}
+
+\begin{step}{README を書く}
+\begin{terminal}[Git Bash]
+$ code README.md
+\end{terminal}
+VS Code が開くので、次の内容を書いて \key{Ctrl}+\key{S} で保存します。
+\begin{filebox}{README.md}
+\begin{Piton}[language=code]
+# git-practice
+
+Git の練習用リポジトリです。
+
+## 自己紹介
+
+- 名前：柴山りゅうせい
+- 所属：理工学部 応用化学科 2年／理工体剣道部
+- 好きな技：（ここに書く）
+\end{Piton}
+\end{filebox}
+\code{.md} は \term{Markdown}（マークダウン）という書式です。
+\code{\#} が見出し、\code{-} が箇条書きになります。GitHub ではきれいに整えて表示されます。
+\end{step}
+
+\begin{step}{status → add → commit}
+\begin{terminal}[Git Bash]
+$ git status
+On branch main
+No commits yet
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        README.md
+
+$ git add README.md
+$ git status
+Changes to be committed:
+        new file:   README.md
+
+$ git commit -m "docs: README を追加"
+[main (root-commit) 3f2a1c9] docs: README を追加
+ 1 file changed, 9 insertions(+)
+\end{terminal}
+\textbf{\code{git status} は何度打ってもかまいません。}迷ったらまず \code{git status} です。
+いまどの場所に何があるのかを教えてくれます。
+\end{step}
+
+\begin{step}{GitHub に push する}
+さっき開いておいた GitHub の画面にある \textbf{SSH} のアドレス（\code{git@github.com:...}）を使います。
+\begin{terminal}[Git Bash]
+$ git remote add origin git@github.com:shibayama-ryusei/git-practice.git
+$ git push -u origin main
+...
+To github.com:shibayama-ryusei/git-practice.git
+ * [new branch]      main -> main
+\end{terminal}
+GitHub の画面を再読み込みして、README が表示されていれば成功です。
+\code{origin} は「GitHub 側のリポジトリ」につけたあだ名です。
+\code{-u} は初回だけ付ければよく、2回目からは \code{git push} だけで送れます。
+\end{step}
+
+\section{コミットメッセージの書き方}
+
+この教材と本番のリポジトリでは、コミットメッセージを次の形で書きます（\term{Conventional Commits}）。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{l l X}
+\toprule
+種類 & 使うとき & 例 \\
+\midrule
+\code{feat} & 新しい機能やページを足した & \code{feat: FAQ ページを追加} \\
+\code{fix} & バグを直した & \code{fix: スマホで見出しがはみ出るのを修正} \\
+\code{style} & 見た目だけを変えた & \code{style: ボタンの色を紺に変更} \\
+\code{docs} & 説明文や README を変えた & \code{docs: README に起動方法を追記} \\
+\code{refactor} & 動きは同じまま、書き方を整理した & \code{refactor: 部員表示を関数に切り出す} \\
+\code{chore} & 設定などの雑務 & \code{chore: .gitignore を追加} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{tip}[よいコミットの大きさ]
+「1つのコミット＝説明が1行で済む変更」が目安です。
+メッセージに「と」を書きたくなったら（「見出しを直したのと、FAQ を足した」）、コミットを分けるサインです。
+こまめにコミットしておくと、壊したときに戻れる地点が増えます。
+\end{tip}
+
+\section{差分を見る}
+
+\begin{step}{変更を加えて diff を見る}
+README の「好きな技」を書き換えて保存してから、次を打ちます。
+\begin{terminal}[Git Bash]
+$ git diff
+diff --git a/README.md b/README.md
+@@ -7,4 +7,4 @@
+ - 名前：柴山りゅうせい
+ - 所属：理工学部 応用化学科 2年／理工体剣道部
+-- 好きな技：（ここに書く）
++- 好きな技：出小手
+\end{terminal}
+\code{-} で始まる行が消えた行、\code{+} で始まる行が足された行です。
+\textbf{\code{git diff} を読む力は、AI と開発するときに一番大事な力です。}
+Claude Code が何を変えたのかは、最終的にはこれで確かめます。
+\end{step}
+
+\begin{step}{履歴を見る}
+変更を add・commit・push してから、履歴を見ます。
+\begin{terminal}[Git Bash]
+$ git add README.md
+$ git commit -m "docs: 好きな技を追記"
+$ git push
+$ git log --oneline
+a81d0e4 (HEAD -> main, origin/main) docs: 好きな技を追記
+3f2a1c9 docs: README を追加
+\end{terminal}
+\end{step}
+
+\begin{tip}[VS Code でも差分は見られる]
+VS Code の左端にある、枝分かれしたアイコン（ソース管理）を押すと、変更したファイルの一覧が出ます。
+ファイル名を押すと、変更前と変更後が左右に並んで表示されます。
+ターミナルの \code{git diff} と同じものなので、見やすい方を使ってかまいません。
+\end{tip}
+
+\section{取り消し方}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{X l}
+\toprule
+状況 & コマンド \\
+\midrule
+保存したけど、まだ add していない変更をなかったことにしたい & \code{git restore ファイル名} \\
+add したけど、やっぱり準備エリアから外したい & \code{git restore --staged ファイル名} \\
+直前のコミットのメッセージを直したい（\textbf{push する前だけ}） & \code{git commit --amend -m "新しいメッセージ"} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{caution}[push した後の履歴は書き換えない]
+\code{--amend} や \code{git reset} で履歴を書き換えたあとに push しようとすると、拒否されます。
+そこで \code{git push -f}（強制 push）を使うと、GitHub 側の履歴を上書きしてしまい、
+チーム開発では他の人の作業を消す事故になります。
+\textbf{強制 push は、先輩に相談してからでないと使わない}と決めておいてください。
+\end{caution}
+
+\section{.gitignore：Git に記録させないもの}
+
+パスワードや、自動で作られる大量のファイルは、Git に記録してはいけません。
+記録させないファイルを書いておくのが \code{.gitignore} です。
+
+\begin{filebox}{.gitignore（第2巻以降で使う例）}
+\begin{Piton}[language=code]
+# 自動で作られる大量のファイル
+node_modules/
+.next/
+
+# 秘密の設定（API キーなど）
+.env*
+!.env.example
+
+# OS が勝手に作るファイル
+Thumbs.db
+.DS_Store
+\end{Piton}
+\end{filebox}
+
+\begin{caution}[秘密情報を push してしまったら]
+API キーやパスワードを含むファイルを GitHub に push してしまったら、\textbf{すぐに先輩に連絡してください}。
+コミットを消しても、一度公開されたキーは誰かに見られた前提で扱う必要があり、キーそのものを作り直す必要があります。
+隠さずにすぐ言ってくれれば、被害はほぼ防げます。
+\end{caution}
+
+\section{よくあるエラー}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily\raggedright\arraybackslash}p{5.2cm} X}
+\toprule
+\normalfont エラーの一部 & 原因と対処 \\
+\midrule
+Permission denied (publickey) & SSH 鍵が GitHub に登録されていないか、HTTPS のアドレスと混ざっている。\code{ssh -T git@github.com} で確かめる \\
+\addlinespace
+Please tell me who you are & 初期設定（\code{user.name}、\code{user.email}）をしていない。第3章に戻る \\
+\addlinespace
+nothing to commit, working tree clean & 記録する変更がない。保存（\key{Ctrl}+\key{S}）し忘れていないか確認する \\
+\addlinespace
+! [rejected] ... (fetch first) & GitHub 側に、自分の PC にない記録がある。\code{git pull} してから push する \\
+\addlinespace
+not a git repository & Git の管理下にないフォルダにいる。\code{pwd} で場所を確認する \\
+\addlinespace
+\normalfont（\code{-m} を付け忘れて VS Code のタブが開いた） & メッセージ入力用のタブ。1行目にメッセージを書いて保存し、タブを閉じれば commit される \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{challenge}{わざと失敗して、元に戻す}
+\sheet{5-6}
+\code{git-practice} で次のことを順にやり、各段階で \code{git status} の表示がどう変わるかをメモしてください。
+\begin{enumerate}
+  \item README を適当に書き換えて保存する → \code{git restore} で元に戻す
+  \item \code{keiko.md} という新しいファイルを作り、add する → \code{git restore --staged} で準備エリアから外す
+  \item \code{keiko.md} を commit する。そのときメッセージをわざと間違える → \code{--amend} で直してから push する
+\end{enumerate}
+「どの場所にあるファイルを、どの場所に戻したのか」を、本章の3つの場所の図を使って定例で説明します。
+\end{challenge}
+
+\begin{checklist}
+\begin{itemize}
+  \checkitem 作業場・準備エリア・ローカルの記録・GitHub の4つの関係を図で説明できる
+  \checkitem \code{status → add → commit → push} を、資料を見ずにできる
+  \checkitem \code{git diff} の \code{+} と \code{-} を読める
+  \checkitem Conventional Commits の形でメッセージを書ける
+  \checkitem 強制 push をしてはいけない理由を言える
+  \checkitem 秘密情報を push してしまったときの対応を言える
+\end{itemize}
+\end{checklist}

@@ -1,0 +1,170 @@
+% =====================================================================
+% kendoweb.sty — 「剣道部サイトでまなぶWeb開発」共通スタイル
+% LuaLaTeX + jlreq 前提。各巻の .tex から \usepackage{../common/kendoweb} で読む
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kendoweb}[2026/11/05 kendo web textbook style]
+
+% ---------- フォント ----------
+\RequirePackage[hiragino-pron,deluxe]{luatexja-preset}
+\RequirePackage{fontspec}
+\setmonofont{Menlo}[Scale=0.88]
+\setmainfont{Hiragino Sans}[UprightFont=* W3,BoldFont=* W6]
+\setsansfont{Hiragino Sans}[UprightFont=* W3,BoldFont=* W6]
+
+% ---------- 基本パッケージ ----------
+\RequirePackage[table]{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,fit,backgrounds,calc,shadows}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{enumitem}
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\RequirePackage{fontawesome5}
+\RequirePackage{piton}
+\RequirePackage{amssymb}
+\RequirePackage{fancyvrb}
+
+% ---------- 色（紺と朱） ----------
+\definecolor{kon}{HTML}{1F3A5F}       % 紺：見出し・枠
+\definecolor{shu}{HTML}{B5422E}       % 朱：注意
+\definecolor{matcha}{HTML}{4E7A3A}    % 抹茶：ヒント・チェック
+\definecolor{kincha}{HTML}{B07D2B}    % 金茶：AI
+\definecolor{sumi}{HTML}{2B2B2B}      % 墨：端末背景
+\definecolor{washi}{HTML}{F6F7F9}     % 地色（薄いグレー）
+\definecolor{linkblue}{HTML}{2A5DB0}
+\definecolor{wintitle}{HTML}{F3F3F3}
+\definecolor{winblue}{HTML}{0067C0}
+
+% ---------- ハイパーリンク（目次から飛べる） ----------
+\RequirePackage[unicode,bookmarksnumbered,bookmarksopen]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=kon,urlcolor=linkblue,citecolor=kon,
+  pdfauthor={三角 優斗},pdfcreator={LuaLaTeX}}
+\RequirePackage{bookmark}
+
+% ---------- 箇条書き ----------
+\setlist{itemsep=0.2\baselineskip,topsep=0.4\baselineskip}
+
+% ---------- piton（コード表示） ----------
+\PitonOptions{splittable=4,background-color=washi,font-command=\ttfamily\small,
+  break-lines,indent-broken-lines,left-margin=auto}
+
+% コード用の言語（JS・HTML・CSS 共通で使う簡易版）
+\NewPitonLanguage{code}{morekeywords={const,let,function,return,if,else,for,of,new,true,false,null,undefined,typeof,import,export,from,async,await},
+  sensitive,morecomment=[l]//,morecomment=[s]{/*}{*/},morecomment=[s]{<!--}{-->},
+  morestring=[b]",morestring=[b]`}
+\SetPitonStyle{Comment=\color{gray},Keyword=\color{kon}\bfseries,String=\color{shu},
+  Name.Function=\color{matcha!80!black},Number=\color{kincha}}
+
+% =====================================================================
+% 囲み枠
+% =====================================================================
+\tcbset{kwbase/.style={enhanced,breakable,arc=2pt,boxrule=0.6pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,fonttitle=\bfseries\sffamily,
+  before skip=8pt,after skip=8pt}}
+
+% STEP：手を動かす手順。\begin{step}{Git をインストールする} ... \end{step}
+\newcounter{stepno}[chapter]
+\newtcolorbox{step}[1]{kwbase,colback=white,colframe=kon,
+  title={\stepcounter{stepno}STEP \thestepno\quad #1},
+  attach boxed title to top left={xshift=6pt,yshift=-2mm},
+  boxed title style={colback=kon,arc=1pt,boxrule=0pt},top=8pt}
+
+% 注意
+\newtcolorbox{caution}[1][注意]{kwbase,colback=shu!5,colframe=shu,
+  title={\faExclamationTriangle\quad #1}}
+
+% ヒント・豆知識
+\newtcolorbox{tip}[1][ヒント]{kwbase,colback=matcha!5,colframe=matcha,
+  title={\faLightbulb[regular]\quad #1}}
+
+% なぜ？（理由の説明）
+\newtcolorbox{why}[1][なぜこうするのか]{kwbase,colback=kon!4,colframe=kon!60,
+  title={\faQuestionCircle[regular]\quad #1}}
+
+% Claude Code に送るプロンプト例
+\newtcolorbox{prompt}[1][Claude Code にこう頼む]{kwbase,colback=kincha!6,colframe=kincha,
+  title={\faRobot\quad #1},fontupper=\small}
+
+% 悪い頼み方
+\newtcolorbox{badprompt}[1][よくない頼み方]{kwbase,colback=gray!6,colframe=gray!60,
+  title={\faTimesCircle[regular]\quad #1},fontupper=\small}
+
+% 章末チェックリスト
+\newtcolorbox{checklist}[1][できるようになったかチェック]{kwbase,colback=matcha!4,colframe=matcha,
+  title={\faCheckSquare[regular]\quad #1}}
+\newcommand{\checkitem}{\item[$\square$]}
+
+% 変化課題（手本と少し違う課題）
+\newtcolorbox{challenge}[1]{kwbase,colback=white,colframe=shu!80!black,
+  title={\faFlagCheckered\quad 腕だめし：#1},boxrule=1pt}
+
+
+% 練習問題（章ごとに番号）。\begin{exercise}[難易度★の数]{見出し} ... \end{exercise}
+\newcommand{\stars}[1]{{\color{kincha}\foreach \i in {1,...,#1}{\faStar}}}
+\newtcolorbox[auto counter,number within=chapter,number format=\arabic]{exercise}[2][1]{kwbase,colback=white,colframe=kon!50,
+  title={練習 \thetcbcounter\quad #2\hfill\stars{#1}}}
+% 解答例への参照
+\newcommand{\toanswer}{\hfill{\small\sffamily\color{kon}→ 解答例は付録}}
+
+% このタスクはスプシの何行目か
+\newcommand{\sheet}[1]{\hfill{\small\sffamily\color{kon}\faTable\ スプシ #1}}
+
+% ---------- 端末（Git Bash / PowerShell） ----------
+% \begin{terminal}[Git Bash] ... \end{terminal}  中身は Verbatim
+\DefineVerbatimEnvironment{termtext}{Verbatim}{fontsize=\small,formatcom=\color{white}}
+\newenvironment{terminal}[1][Git Bash]{%
+  \VerbatimEnvironment
+  \begin{tcolorbox}[kwbase,colback=sumi,colframe=sumi!70!black,coltitle=white,
+    colbacktitle=sumi!80!white,title={\faTerminal\quad #1},fonttitle=\small\ttfamily]%
+  \begin{termtext}}%
+ {\end{termtext}\end{tcolorbox}}
+
+% ファイルの中身（ファイル名つき）。枠を入れ子にするとページで分割できないので、
+% ファイル名の帯 ＋ 背景つきコード（piton の splittable で分割可）という軽い形にする
+\newenvironment{filebox}[1]{%
+  \par\smallskip\noindent
+  \colorbox{gray!18}{\makebox[\dimexpr\linewidth-2\fboxsep][l]{\small\sffamily\faFile*[regular]\ \ttfamily #1}}%
+  \par\nointerlineskip}{\par\smallskip}
+
+% インラインのコード・キー・ボタン
+\newcommand{\code}[1]{\texttt{\color{shu!80!black}#1}}
+\newcommand{\key}[1]{\tikz[baseline=(k.base)]\node[minimum width=0pt,draw=gray,rounded corners=1.5pt,
+  inner sep=1.5pt,fill=gray!8,font=\small\ttfamily](k){#1};}
+\newcommand{\btn}[1]{\tikz[baseline=(b.base)]\node[minimum width=0pt,draw=winblue,rounded corners=2pt,
+  inner xsep=4pt,inner ysep=1.5pt,fill=winblue!8,font=\small\sffamily](b){#1};}
+\newcommand{\menu}[1]{\textsf{\bfseries #1}}
+\newcommand{\term}[1]{\textbf{#1}}  % 新しい用語の初出
+
+% =====================================================================
+% Windows 画面の模式図
+% \begin{winwin}{ウィンドウのタイトル} ... \end{winwin}
+% 任意引数で幅を指定: \begin{winwin}[0.6\linewidth]{...}
+% =====================================================================
+\newtcolorbox{winwin}[2][0.82\linewidth]{enhanced,width=#1,center,sharp corners,
+  colback=white,colframe=gray!55,boxrule=0.5pt,colbacktitle=wintitle,coltitle=black,
+  fonttitle=\sffamily\footnotesize,title={#2\hfill\textendash\quad$\square$\quad$\times$},
+  drop fuzzy shadow=black!25,fontupper=\sffamily\small,before skip=10pt,after skip=10pt,
+  left=10pt,right=10pt,top=6pt,bottom=6pt}
+% 端末ウィンドウ（黒背景、Windows Terminal 風）
+\newtcolorbox{wintermwin}[2][0.82\linewidth]{enhanced,width=#1,center,sharp corners,
+  colback=sumi,colupper=white,colframe=gray!55,boxrule=0.5pt,colbacktitle=sumi!85!white,
+  coltitle=white,fonttitle=\sffamily\footnotesize,
+  title={#2\hfill\textendash\quad$\square$\quad$\times$},
+  drop fuzzy shadow=black!25,fontupper=\ttfamily\small,before skip=10pt,after skip=10pt}
+
+% インストーラなどの選択肢（ラジオボタン）
+\newcommand{\radio}[2]{\par\noindent\ifnum#1=1 $\boldsymbol{\odot}$\else $\bigcirc$\fi\ #2\par}
+\newcommand{\chk}[2]{\par\noindent\ifnum#1=1 $\boxtimes$\else $\square$\fi\ #2\par}
+\newcommand{\winbuttons}[1]{\par\vspace{4pt}\hfill #1}
+
+% 画面写真（枠つき）
+\newcommand{\screenshot}[2][0.9]{%
+  \begin{center}\fcolorbox{gray!50}{white}{\includegraphics[width=#1\linewidth]{#2}}\end{center}}
+
+% 図のキャプション（番号なし・簡易）
+\newcommand{\figcap}[1]{\begin{center}\small\color{gray!70!black}#1\end{center}}
+
+\endinput

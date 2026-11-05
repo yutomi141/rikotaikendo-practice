@@ -1,0 +1,195 @@
+\section{練習問題}
+\sheet{7-12〜7-27}
+
+ここまでの内容を、手を動かして固めます。\textbf{★が多いほど難しい}問題です。
+練習用に、\code{kendo-top} とは別に \code{\textasciitilde/dev/html-drill} というフォルダを作り、問題ごとに \code{q01.html}、\code{q02.html} \ldots とファイルを分けて解いてください（\code{git init} して、解けたらコミットする）。
+解答例は付録にあります。\textbf{答えを見るのは、自分で書いてブラウザで確かめてから}にしてください。
+
+\begin{tip}[練習問題での Claude の使い方]
+練習問題では、Claude に答えを書かせません。使ってよいのは次の2つだけです。
+\begin{itemize}
+  \item 「\code{<dl>} タグの使い方を教えて。ただしこの問題の答えは書かないで」のように、\textbf{道具の使い方}を聞く
+  \item 自分の答えを見せて「どこが間違っているか、ヒントだけちょうだい」と\textbf{答え合わせ}をする
+\end{itemize}
+\end{tip}
+
+\subsection*{HTML}
+
+\begin{exercise}[1]{見出しの階層}
+\toanswer\par
+次の文章を、\code{h1}〜\code{h3} と \code{p} を使って HTML にしてください。
+\begin{quote}\small
+理工体剣道部の一年（大見出し）\\
+春（中見出し）\quad 新歓（小見出し）：新入生の体験稽古を行う。\quad 早慶戦（小見出し）：伝統の一戦。\\
+夏（中見出し）\quad 夏合宿（小見出し）：4泊5日で鍛える。
+\end{quote}
+\end{exercise}
+
+\begin{exercise}[1]{外部リンク}
+\toanswer\par
+「部の Instagram はこちら」という文章を書き、「こちら」を押すと \code{https://www.instagram.com/} が\textbf{新しいタブで}開くようにしてください。
+新しいタブで開くときに一緒に付けるべき属性も調べて付けてください。
+\end{exercise}
+
+\begin{exercise}[1]{画像と代わりの文章}
+\toanswer\par
+\code{images/hero.jpg} を幅 300px で表示してください。
+あわせて、画像が読み込めなかったときや、目の見えない人が読み上げソフトを使ったときに伝わる説明文を付けてください。
+\end{exercise}
+
+\begin{exercise}[2]{持ち物リスト}
+\toanswer\par
+「体験稽古の持ち物」として、動きやすい服装・タオル・飲み物・上履き（体育館用）の4つを箇条書きにしてください。
+次に、「入部までの流れ」（見学する → 体験稽古に出る → 入部届を出す）を、\textbf{番号付き}の箇条書きにしてください。
+2つでタグをどう使い分けたかを説明できるようにしておきます。
+\end{exercise}
+
+\begin{exercise}[2]{年間行事の表}
+\toanswer\par
+次の表を HTML で作ってください。見出しの行は \code{<thead>}、中身は \code{<tbody>} に入れます。
+\begin{center}\small
+\begin{tabular}{lll}\toprule
+月 & 行事 & 区分 \\\midrule
+4月 & 新歓・体験稽古 & イベント \\
+6月 & 早慶戦 & 試合 \\
+8月 & 夏合宿 & 合宿 \\
+3月 & 春合宿 & 合宿 \\\bottomrule
+\end{tabular}
+\end{center}
+\end{exercise}
+
+\begin{exercise}[2]{間違い探し}
+\toanswer\par
+次の HTML には、間違いが\textbf{4つ}あります。すべて見つけて直してください。
+\begin{filebox}{q06.html}
+\begin{Piton}[language=code]
+<section>
+  <h2>稽古について<h2>
+  <p>稽古は<strong>週4回</p></strong>
+  <ul>
+    <p>火曜日</p>
+    <li>水曜日</li>
+  </ul>
+  <img src="images/hero.jpg">
+</section>
+\end{Piton}
+\end{filebox}
+\end{exercise}
+
+\begin{exercise}[2]{問い合わせフォーム（見た目だけ）}
+\toanswer\par
+名前・メールアドレス・問い合わせ内容（複数行）・送信ボタンの4つを持つフォームを作ってください。
+\begin{itemize}
+  \item 各入力欄には \code{<label>} を付け、ラベルを押すとその入力欄にカーソルが入るようにする
+  \item メールアドレス欄は、メールの形になっていないと送信できないようにする
+  \item 名前とメールアドレスは、空のままでは送信できないようにする
+\end{itemize}
+（実際の送信の仕組みは第5巻で作ります。ここでは見た目と入力のチェックだけです。）
+\end{exercise}
+
+\subsection*{CSS}
+
+\begin{exercise}[1]{サイトの色を一気に変える}
+\toanswer\par
+\code{kendo-top} の \code{style.css} で、\textbf{\code{:root} の中だけを書き換えて}、紺の部分を深緑（\code{\#1e4d3a}）に、朱の部分を金色（\code{\#b8860b}）に変えてください。
+確かめたら、\code{git restore style.css} で元に戻します。
+CSS 変数を使うと何がうれしいのかを、1文で説明できるようにしておきます。
+\end{exercise}
+
+\begin{exercise}[1]{セレクタはどれに効く？}
+\toanswer\par
+次の HTML と CSS で、\textbf{赤くなる文字}はどれでしょう。ブラウザで確かめる前に予想を書いてください。
+\begin{filebox}{q09.html}
+\begin{Piton}[language=code]
+<section class="news">
+  <h2>お知らせ</h2>
+  <p>新歓稽古を行います。</p>
+  <p class="important">雨天でも実施します。</p>
+</section>
+<p class="important">このサイトは練習用です。</p>
+
+<style>
+  .news p { color: red; }
+  #top { color: red; }
+  h3 { color: red; }
+</style>
+\end{Piton}
+\end{filebox}
+\end{exercise}
+
+\begin{exercise}[2]{箱の幅を計算する}
+\toanswer\par
+次の CSS が付いた \code{div} の、\textbf{画面上での横幅}（枠線の外側まで）は何 px でしょう。
+(1) \code{box-sizing} の指定がない場合と、(2) \code{box-sizing: border-box;} がある場合の両方を計算し、
+開発者ツールで実際の数字を確かめてください。
+\begin{Piton}[language=code]
+div { width: 300px; padding: 20px; border: 2px solid black; margin: 10px; }
+\end{Piton}
+\end{exercise}
+
+\begin{exercise}[2]{ボタンに反応をつける}
+\toanswer\par
+\code{.button} にマウスを乗せたとき、少し暗い色になり、0.2秒かけてなめらかに色が変わるようにしてください。
+（ヒント：\code{:hover} と \code{transition}）
+\end{exercise}
+
+\begin{exercise}[2]{フッターを3列にする}
+\toanswer\par
+フッターを、「部の名前」「稽古場所」「SNS」の3つのかたまりが横に並ぶ形に作り変えてください。
+スマホの幅では縦1列に並ぶようにします。
+\end{exercise}
+
+\begin{exercise}[3]{どちらの CSS が勝つ？}
+\toanswer\par
+次の3つのルールが同じ \code{<h2 class="title" id="main-title">} に当たったとき、文字は何色になるでしょう。
+理由を「詳細度」という言葉を使って説明してください。
+\begin{Piton}[language=code]
+#main-title { color: green; }
+h2.title    { color: blue; }
+.title      { color: red; }
+\end{Piton}
+そのうえで、3つ目の \code{.title} の色を勝たせるにはどう書き換えればよいかを考えてください（\code{!important} は使わない）。
+\end{exercise}
+
+\subsection*{レスポンシブと開発者ツール}
+
+\begin{exercise}[2]{タブレットでは2列にする}
+\toanswer\par
+「部について」のカードを、画面の幅に応じて次のように並べてください。
+\begin{center}\small
+\begin{tabular}{ll}\toprule
+画面の幅 & カードの並び \\\midrule
+961px 以上（PC） & 横に3枚 \\
+641〜960px（タブレット） & 2枚ずつ（3枚目は次の行） \\
+640px 以下（スマホ） & 縦に1枚ずつ \\\bottomrule
+\end{tabular}
+\end{center}
+（ヒント：\code{flex-wrap: wrap;} と、カードの幅の指定）
+\end{exercise}
+
+\begin{exercise}[2]{開発者ツールで原因を探す}
+\toanswer\par
+\code{kendo-top} の見出し（\code{h2}）の左にある朱色の線について、開発者ツールだけを使って次のことを調べてください。
+\begin{enumerate}
+  \item その線は、\code{style.css} の何行目の、どのプロパティで指定されているか
+  \item 線の太さを開発者ツール上で 12px に変えると、どう見えるか
+  \item 再読み込みすると元に戻ることを確かめる
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[3]{見本を再現する}
+\toanswer\par
+次の見本と同じ見た目の「部の数字」セクションを、HTML と CSS で作ってください。
+数字は大きく朱色、説明は小さく灰色です。スマホでは2枚ずつ並べます。
+\begin{center}
+\begin{tikzpicture}[font=\sffamily]
+  \draw[gray!30,fill=washi] (-0.3,-0.4) rectangle (12.3,2.2);
+  \foreach \x/\n/\t in {0/52/部員数,3.1/4/週の稽古回数,6.2/2/年間の合宿,9.3/70/初心者・リバ剣の割合（\%）}{
+    \draw[fill=white,draw=gray!20,rounded corners=4pt] (\x,0) rectangle (\x+2.8,1.8);
+    \node[text=shu,font=\sffamily\bfseries\huge] at (\x+1.4,1.15) {\n};
+    \node[text=gray,font=\sffamily\scriptsize] at (\x+1.4,0.4) {\t};
+  }
+\end{tikzpicture}
+\end{center}
+（数字はダミーです）
+\end{exercise}

@@ -1,0 +1,351 @@
+\chapter{Windows の開発環境をつくる}
+\sheet{3-1〜3-9}
+
+この章では、開発に使う道具を PC にインストールします。
+この教材全体で一番つまずきやすいところなので、\textbf{STEP の順番を守り、各 STEP の「確認」まで終えてから次へ}進んでください。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{c l X}
+\toprule
+順番 & 道具 & 何に使うか \\
+\midrule
+1 & VS Code & コードを書くエディタ（Word のコード版） \\
+2 & Git for Windows & 変更の履歴を管理する Git と、黒い画面の Git Bash \\
+3 & Git の初期設定 & 名前・メールアドレスの登録 \\
+4 & SSH 鍵 & パスワードなしで GitHub とやりとりするための鍵 \\
+5 & Node.js & JavaScript を PC 上で動かす。第2巻以降で必須 \\
+6 & Claude Code & AI に開発を手伝ってもらう \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{why}[なぜ VS Code を先に入れるのか]
+Git のインストール中に「Git が使うエディタはどれにするか」を聞かれます。
+そのとき VS Code が入っていれば選択肢に出てくるので、先に入れておきます。
+\end{why}
+
+\section{2種類の「黒い画面」：PowerShell と Git Bash}
+
+Windows には、文字でコンピュータに命令する画面（\term{ターミナル}）が何種類かあります。
+この教材で使うのは次の2つです。
+
+\begin{center}
+\begin{minipage}[t]{0.48\linewidth}
+\begin{wintermwin}[\linewidth]{Windows PowerShell}
+PS C:\textbackslash Users\textbackslash ryusei>
+\end{wintermwin}
+\centering\small\textbf{PowerShell}\\Windows に最初から入っている。\\\textbf{インストール作業のときだけ}使う。
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\begin{wintermwin}[\linewidth]{MINGW64:/c/Users/ryusei}
+{\color{matcha!70!white}ryusei@DESKTOP} {\color{violet!50!white}MINGW64} {\color{kincha!80!white}\textasciitilde}\\
+\$
+\end{wintermwin}
+\centering\small\textbf{Git Bash}\\Git と一緒に入る。\\\textbf{普段の作業はすべてこちら}で行う。
+\end{minipage}
+\end{center}
+
+\begin{why}[なぜ Git Bash を使うのか]
+本番のサイトを動かしている Vercel のサーバーも、先輩の Mac も、中身は同じ系統の仕組み（Unix 系）で動いています。
+Git Bash はその Unix 系と同じ命令が使えるので、ネットで見つけた手順や Claude が出すコマンドがそのまま通ります。
+大学の Git 演習の授業で使っているのも Git Bash です。
+\end{why}
+
+見分け方は簡単で、\textbf{行の先頭が \texttt{PS} なら PowerShell、\texttt{\$} なら Git Bash} です。
+この教材の黒い枠には、左上にどちらで打つのかが書いてあります。
+
+\section{作業フォルダの場所を決める}
+
+\begin{caution}[作業フォルダを置いてはいけない場所]
+\begin{itemize}
+  \item \textbf{デスクトップ、ドキュメント}：OneDrive と同期していることが多く、同期の途中でファイルが壊れたり、\code{node\_modules}（第2巻で出てくる大量のファイル）の同期で PC が重くなったりします。
+  \item \textbf{日本語やスペースを含むフォルダ}：一部の道具がうまく動きません。
+\end{itemize}
+\end{caution}
+
+この教材では、作業フォルダを \verb|C:\Users\(あなたのユーザー名)\dev| に統一します。
+Git Bash では、これを \verb|~/dev| と書きます（\verb|~| はホームフォルダを表す記号で、「チルダ」と読みます）。
+フォルダ自体は、第4章で自分のコマンドを使って作ります。
+
+\section{VS Code}
+
+\begin{step}{VS Code をダウンロードしてインストールする}
+\begin{enumerate}
+  \item \url{https://code.visualstudio.com/download} を開き、\textbf{Windows の Download}（x64 User Installer）を押します。
+  \screenshot[0.85]{vscode-download.png}
+  \item ダウンロードした \code{VSCodeUserSetup-x64-(バージョン).exe} を開きます。
+  \item 「追加タスクの選択」の画面では、\textbf{次の項目すべてにチェックを入れます。}
+\end{enumerate}
+
+\begin{winwin}[0.75\linewidth]{セットアップ - Microsoft Visual Studio Code (User)}
+\textbf{追加タスクの選択}\par\smallskip
+\chk{1}{デスクトップ上にアイコンを作成する}
+\chk{1}{エクスプローラーのファイル コンテキスト メニューに [Code で開く] アクションを追加する}
+\chk{1}{エクスプローラーのディレクトリ コンテキスト メニューに [Code で開く] アクションを追加する}
+\chk{1}{サポートされているファイルの種類のエディターとして、Code を登録する}
+\chk{1}{PATH への追加（再起動後に使用可能）}
+\winbuttons{\btn{戻る}\ \btn{次へ}\ \btn{キャンセル}}
+\end{winwin}
+\figcap{「PATH への追加」は特に重要。ターミナルから \code{code} コマンドで VS Code を開けるようになる}
+
+\begin{enumerate}[resume]
+  \item \btn{インストール} を押し、終わったら \btn{完了} を押します。
+\end{enumerate}
+\end{step}
+
+\begin{step}{日本語化と、改行コードの設定}
+\begin{enumerate}
+  \item VS Code の左端にある四角が4つのアイコン（拡張機能）を押し、\code{Japanese Language Pack} を検索してインストールします。右下に出る \btn{Restart} を押すと、メニューが日本語になります。
+  \item \key{Ctrl}+\key{,} で設定を開き、上の検索欄に \code{eol} と打ちます。
+  \item \menu{Files: Eol} を \code{\textbackslash n} に変更します。
+\end{enumerate}
+\end{step}
+
+\begin{why}[改行コードとは]
+文章の「改行」は、コンピュータの中では見えない記号で表されています。
+Windows は伝統的に \code{CRLF}、Mac や Linux やサーバーは \code{LF} という別の記号を使います。
+混ざると、中身は変わっていないのに Git が「全行変更された」と判断してしまいます。
+そこで、この教材では \code{LF}（\code{\textbackslash n}）にそろえます。
+\end{why}
+
+\section{Git for Windows}
+
+\begin{step}{Git をダウンロードする}
+\url{https://git-scm.com/downloads/win} を開き、一番上の \textbf{Click here to download} を押します。
+\screenshot[0.85]{git-download.png}
+\figcap{2026年11月時点の最新版は 2.56.0。数字が違っていても、一番上のリンクで問題ない}
+\end{step}
+
+\begin{step}{インストーラーを進める}
+ダウンロードした \code{Git-(バージョン)-64-bit.exe} を開きます。画面がたくさん出てきますが、\textbf{変更するのは3か所だけ}です。
+それ以外は何も変えずに \btn{Next} を押してください。
+
+\begin{winwin}[0.78\linewidth]{Git 2.56.0 Setup}
+\textbf{Choosing the default editor used by Git}\par\smallskip
+\fbox{\makebox[0.92\linewidth][l]{\small Use Visual Studio Code as Git's default editor \hfill$\blacktriangledown$}}\par
+\winbuttons{\btn{Back}\ \btn{Next}\ \btn{Cancel}}
+\end{winwin}
+\figcap{変更①：エディタをVim から \textbf{Visual Studio Code} に変える（Vim は操作が難しく、初心者が抜け出せなくなる）}
+
+\begin{winwin}[0.78\linewidth]{Git 2.56.0 Setup}
+\textbf{Adjusting the name of the initial branch in new repositories}\par\smallskip
+\radio{0}{Let Git decide}
+\radio{1}{Override the default branch name for new repositories}
+\hspace*{2em}\fbox{\makebox[0.3\linewidth][l]{\small main}}\par
+\winbuttons{\btn{Back}\ \btn{Next}\ \btn{Cancel}}
+\end{winwin}
+\figcap{変更②：下を選び、\code{main} と入力する（GitHub の標準に合わせる）}
+
+\begin{winwin}[0.78\linewidth]{Git 2.56.0 Setup}
+\textbf{Configuring the line ending conversions}\par\smallskip
+\radio{0}{Checkout Windows-style, commit Unix-style line endings}
+\radio{1}{Checkout as-is, commit Unix-style line endings}
+\radio{0}{Checkout as-is, commit as-is}
+\winbuttons{\btn{Back}\ \btn{Next}\ \btn{Cancel}}
+\end{winwin}
+\figcap{変更③：\textbf{真ん中}を選ぶ（改行コードを LF にそろえるため）}
+
+最後に \btn{Install} を押し、終わったら \btn{Finish} を押します。
+\end{step}
+
+\begin{tip}[PATH の画面について]
+途中で「Adjusting your PATH environment」という画面が出ます。
+真ん中の \textbf{Git from the command line and also from 3rd-party software (Recommended)} が選ばれていることを確認してください（最初から選ばれているはずです）。
+\end{tip}
+
+\begin{step}{確認：Git Bash を開いてバージョンを見る}
+スタートメニューで「Git Bash」と検索して開き、次のように打ちます（\code{\$} は打たなくてよい印です）。
+\begin{terminal}[Git Bash]
+$ git --version
+git version 2.56.0.windows.1
+\end{terminal}
+\code{git version} の後に数字が出れば成功です。数字は違っていてもかまいません。
+\end{step}
+
+\section{Git の初期設定}
+
+\begin{step}{名前とメールアドレスを登録する}
+Git は、誰が変更したのかを記録します。そのための名前とメールアドレスを登録します。
+\begin{terminal}[Git Bash]
+$ git config --global user.name "shibayama-ryusei"
+$ git config --global user.email "GitHub に登録したメールアドレス"
+\end{terminal}
+\end{step}
+
+\begin{step}{その他の設定と確認}
+\begin{terminal}[Git Bash]
+$ git config --global core.quotepath false
+$ git config --global init.defaultBranch main
+$ git config --global --list
+user.name=shibayama-ryusei
+user.email=....
+core.quotepath=false
+init.defaultbranch=main
+core.autocrlf=input
+\end{terminal}
+\code{core.quotepath false} は、日本語のファイル名が \code{\textbackslash 346\textbackslash 227...} のような記号の羅列で表示されるのを防ぐ設定です。
+最後の \code{core.autocrlf=input} は、インストーラーで選んだ改行コードの設定です。
+\end{step}
+
+\section{SSH 鍵}
+
+GitHub にコードを送るとき、毎回パスワードを入力する代わりに「鍵」を使って本人確認をします。
+大学の Git 演習 第3回で扱った \term{公開鍵認証}と同じ仕組みです。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\small,
+  box/.style={draw,rounded corners=3pt,minimum width=3cm,minimum height=1.6cm,align=center,fill=white}]
+  \node[box,draw=kon] (pc) {\faLaptop\ あなたの PC\\{\scriptsize \faKey\ 秘密鍵（絶対に渡さない）}};
+  \node[box,draw=gray,right=4cm of pc] (gh) {\faGithub\ GitHub\\{\scriptsize \faLock\ 公開鍵（登録する）}};
+  \draw[-{Stealth},thick,kon] ([yshift=3mm]pc.east) -- node[above,font=\scriptsize]{秘密鍵で署名して送る} ([yshift=3mm]gh.west);
+  \draw[-{Stealth},thick,matcha] ([yshift=-3mm]gh.west) -- node[below,font=\scriptsize]{公開鍵で確かめて「本人だ」と判断} ([yshift=-3mm]pc.east);
+\end{tikzpicture}
+\end{center}
+
+\begin{step}{鍵を作る}
+\begin{terminal}[Git Bash]
+$ ssh-keygen -t ed25519 -C "GitHub に登録したメールアドレス"
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/c/Users/ryusei/.ssh/id_ed25519):   ← Enter
+Enter passphrase (empty for no passphrase):                             ← Enter
+Enter same passphrase again:                                            ← Enter
+\end{terminal}
+質問には3回とも何も打たずに \key{Enter} を押します。
+\end{step}
+
+\begin{step}{公開鍵をコピーして GitHub に登録する}
+\begin{terminal}[Git Bash]
+$ cat ~/.ssh/id_ed25519.pub | clip
+\end{terminal}
+これで公開鍵がクリップボードにコピーされます（\code{clip} は Windows のコピー用コマンドです）。
+GitHub で \url{https://github.com/settings/ssh/new} を開き、\menu{Title} に \code{my-windows-pc} のような名前を入れ、
+\menu{Key} の欄に \key{Ctrl}+\key{V} で貼り付けて \btn{Add SSH key} を押します。
+\screenshot[0.85]{github-ssh-new.jpg}
+\end{step}
+
+\begin{caution}[秘密鍵は絶対に見せない・送らない]
+\code{\textasciitilde/.ssh/id\_ed25519}（\code{.pub} が付いていない方）は秘密鍵です。
+これが他人に渡ると、あなたになりすまして GitHub を操作できてしまいます。
+Claude に見せるのも、LINE で送るのも禁止です。登録するのは \code{.pub} が付いた公開鍵だけです。
+\end{caution}
+
+\begin{step}{確認：GitHub につながるか試す}
+\begin{terminal}[Git Bash]
+$ ssh -T git@github.com
+The authenticity of host 'github.com (...)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Hi shibayama-ryusei! You've successfully authenticated, but GitHub does not provide shell access.
+\end{terminal}
+初回だけ確認を聞かれるので \code{yes} と打ちます。\code{Hi (ユーザー名)!} と出れば成功です。
+\end{step}
+
+\section{Node.js}
+
+\term{Node.js}（ノード）は、ブラウザの外で JavaScript を動かすための道具です。
+第1巻では、作ったページを PC 上で表示するとき（第7章）に使います。第2巻以降は Next.js を動かすのに必須です。
+
+\begin{step}{Node.js をインストールする}
+\begin{enumerate}
+  \item \url{https://nodejs.org/en/download} を開きます。
+  \item 下の方の「Or get a prebuilt Node.js for」で、\textbf{Windows} と \textbf{x64} を選び、\btn{Windows Installer (.msi)} を押します。
+\end{enumerate}
+\screenshot[0.85]{node-download.png}
+\figcap{バージョンは \textbf{LTS}（長期サポート版）を選ぶ。2026年11月時点では v26}
+\begin{enumerate}[resume]
+  \item ダウンロードした \code{.msi} を開き、すべて \btn{Next} で進めます。
+  \item 「Tools for Native Modules」の画面では、\textbf{チェックを入れずに}進めます。
+\end{enumerate}
+\end{step}
+
+\begin{step}{確認：Git Bash を開き直してバージョンを見る}
+インストール前から開いていた Git Bash は、一度閉じて開き直してください（新しく入った道具は、開き直さないと見つかりません）。
+\begin{terminal}[Git Bash]
+$ node -v
+v26.13.0
+$ npm -v
+11.20.0
+\end{terminal}
+\end{step}
+
+\begin{tip}[PowerShell で npm を打つとエラーになる場合]
+PowerShell で \code{npm} を打つと「このシステムではスクリプトの実行が無効になっている」というエラーが出ることがあります。
+これは PowerShell の安全機能によるものです。この教材では \textbf{npm は Git Bash で打つ}ので、気にしなくて大丈夫です。
+\end{tip}
+
+\section{Claude Code}
+
+\begin{step}{PowerShell でインストールする}
+Claude Code のインストールだけは \textbf{PowerShell} で行います。
+スタートメニューで「PowerShell」と検索して開き（管理者として実行する必要はありません）、次のように打ちます。
+\begin{terminal}[PowerShell]
+PS C:\Users\ryusei> irm https://claude.ai/install.ps1 | iex
+\end{terminal}
+しばらく何も表示されないまま待たされますが、正常です。終わるとプロンプト（\code{PS C:\textbackslash ...>}）に戻ります。
+\end{step}
+
+\begin{step}{確認：Git Bash で動くか試す}
+Git Bash を\textbf{新しく開き直して}、次のように打ちます。
+\begin{terminal}[Git Bash]
+$ claude --version
+2.x.xxx (Claude Code)
+$ claude doctor
+\end{terminal}
+バージョンが表示されれば成功です。\code{claude doctor} は設定の健康診断です。警告が出たら内容を控えておき、スプシの詰まりメモに書いてください。
+\end{step}
+
+\begin{tip}[claude: command not found と出たら]
+インストール先のフォルダ（\verb|C:\Users\(ユーザー名)\.local\bin|）が、コマンドを探す場所（PATH）に入っていない状態です。
+次の手順で追加します。
+\begin{enumerate}
+  \item スタートメニューで「環境変数」と検索し、\menu{環境変数を編集}（ユーザー用）を開く
+  \item 上の欄の \menu{Path} を選んで \btn{編集} を押す
+  \item \btn{新規} を押して \verb|%USERPROFILE%\.local\bin| と入力し、\btn{OK} で閉じる
+  \item Git Bash をすべて閉じてから開き直す
+\end{enumerate}
+\end{tip}
+
+\begin{step}{ログインする}
+\begin{terminal}[Git Bash]
+$ claude
+\end{terminal}
+初回はブラウザが開くので、\textbf{Claude Pro のアカウント}でログインします。
+ログイン方法を聞かれたら、\textbf{Claude アカウント（サブスクリプション）}の方を選んでください。
+ログインが終わったら、\code{/exit} と打って一度終了します。
+\end{step}
+
+\begin{caution}[API キーは設定しない]
+Claude Code は、\code{ANTHROPIC\_API\_KEY} という設定があると、Pro の定額の枠ではなく\textbf{使った分だけ課金される API} の方を使います。
+ネットの記事で「API キーを設定しよう」と書いてあっても、\textbf{この教材では設定しません}。
+念のため、次のコマンドで何も表示されないことを確認しておきます。
+\begin{terminal}[Git Bash]
+$ echo $ANTHROPIC_API_KEY
+
+\end{terminal}
+（空行が出るだけなら OK です）
+\end{caution}
+
+\section{VS Code のターミナルを Git Bash にする}
+
+ここまでは Git Bash を単独で開いてきましたが、普段は VS Code の中にあるターミナルを使うと便利です。
+
+\begin{step}{VS Code の標準ターミナルを Git Bash にする}
+\begin{enumerate}
+  \item VS Code で \key{Ctrl}+\key{Shift}+\key{P} を押し、\code{Terminal: Select Default Profile} と打って選びます。
+  \item 一覧から \textbf{Git Bash} を選びます。
+  \item \key{Ctrl}+\key{@} でターミナルを開き、\code{\$} で始まる行が出れば成功です。
+\end{enumerate}
+\end{step}
+
+\begin{checklist}[環境構築の最終チェック（Git Bash ですべて打つ）]
+\begin{itemize}
+  \checkitem \code{git --version} でバージョンが出る
+  \checkitem \code{git config --global user.name} で自分のユーザー名が出る
+  \checkitem \code{ssh -T git@github.com} で \code{Hi (ユーザー名)!} と出る
+  \checkitem \code{node -v} と \code{npm -v} でバージョンが出る
+  \checkitem \code{claude --version} でバージョンが出る
+  \checkitem \code{echo \$ANTHROPIC\_API\_KEY} で何も出ない
+  \checkitem VS Code で \key{Ctrl}+\key{@} を押すと Git Bash が開く
+\end{itemize}
+ここまで終わったら、スプシの 3-1〜3-9 を「完了」にしてください。
+\end{checklist}

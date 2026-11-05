@@ -1,0 +1,15 @@
+# 依存パッケージ・ビルド成果物
+node_modules/
+.next/
+out/
+
+# 秘密の設定（API キーなど）。.env.example だけはコミットする
+.env*
+!.env.example
+
+# 教材のビルド中間ファイル（PDF は docs/textbook/vol*.pdf にコピーしてコミットする）
+docs/textbook/**/build/
+
+# OS
+.DS_Store
+Thumbs.db

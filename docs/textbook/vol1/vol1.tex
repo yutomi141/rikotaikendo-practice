@@ -1,0 +1,51 @@
+% 剣道部サイトでまなぶWeb開発 第1巻
+% ビルド: latexmk vol1.tex
+\documentclass[book,paper=a4,fontsize=11pt,lualatex,openany]{jlreq}
+\usepackage{../common/kendoweb}
+\graphicspath{{figures/}{figures/screens/}}
+\hypersetup{pdftitle={剣道部サイトでまなぶWeb開発 第1巻 準備と、はじめてのWebページ}}
+
+\begin{document}
+
+% ---------- 表紙 ----------
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[kon] (current page.north west) rectangle ([yshift=-11cm]current page.north east);
+  \fill[shu] ([yshift=-11cm]current page.north west) rectangle ([yshift=-11.25cm]current page.north east);
+  \node[anchor=north west,text=white,font=\sffamily\Large] at ([xshift=2.2cm,yshift=-3cm]current page.north west)
+    {理工体剣道部　Web 開発ゼミ};
+  \node[anchor=north west,text=white,font=\sffamily\bfseries\fontsize{30}{40}\selectfont,align=left]
+    at ([xshift=2.2cm,yshift=-4.2cm]current page.north west) {剣道部サイトで\\まなぶ Web 開発};
+  \node[anchor=north west,text=white,font=\sffamily\Large] at ([xshift=2.2cm,yshift=-8.6cm]current page.north west)
+    {第1巻　準備と、はじめての Web ページ};
+  % 竹刀っぽい線
+  \draw[white,line width=2pt,opacity=0.35] ([xshift=-2cm,yshift=-1.5cm]current page.north east) -- ([xshift=-8cm,yshift=-10cm]current page.north east);
+  \draw[white,line width=5pt,opacity=0.35] ([xshift=-7.2cm,yshift=-8.8cm]current page.north east) -- ([xshift=-8cm,yshift=-10cm]current page.north east);
+  \node[anchor=south west,font=\sffamily,align=left,text=sumi] at ([xshift=2.2cm,yshift=3cm]current page.south west)
+    {対象：プログラミング未経験・Windows\\
+     使うもの：Git / GitHub / VS Code / Claude Code / HTML / CSS / JavaScript\\[6pt]
+     作成：三角 優斗　\quad 2026年11月版};
+\end{tikzpicture}
+\end{titlepage}
+
+\frontmatter
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\mainmatter
+\setcounter{chapter}{-1}
+\input{chapters/ch00-guide}
+\input{chapters/ch01-worldmap}
+\input{chapters/ch02-accounts}
+\input{chapters/ch03-environment}
+\input{chapters/ch04-terminal}
+\input{chapters/ch05-git}
+\input{chapters/ch06-claude}
+\input{chapters/ch07-html-css}
+\input{chapters/ch08-javascript}
+
+\appendix
+\input{chapters/appendix}
+
+\end{document}

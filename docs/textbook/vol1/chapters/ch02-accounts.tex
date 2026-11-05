@@ -1,0 +1,105 @@
+\chapter{アカウントをそろえる}
+\sheet{2-1〜2-3}
+
+開発で使うサービスのアカウントを用意します。第1巻で必要なのは、GitHub と Claude の2つだけです。
+Vercel と Supabase は、使う巻（第3巻）になったら作ります。
+
+\section{GitHub}
+
+\term{GitHub}（ギットハブ）は、コードを保管し、変更の履歴を残し、他の人と共同で作業するためのサービスです。
+本番のサイトのコードも、字幕アプリのコードも GitHub にあります。
+
+\begin{step}{GitHub のアカウントを作る}
+\begin{enumerate}
+  \item ブラウザで \url{https://github.com/signup} を開きます。
+  \item メールアドレス、パスワード、ユーザー名を入力します。
+  \item 届いたメールの確認コードを入力すると、登録が完了します。
+\end{enumerate}
+
+\begin{winwin}[0.7\linewidth]{Sign up to GitHub — Google Chrome}
+\centering\textbf{\large Sign up to GitHub}\par\vspace{6pt}
+\raggedright
+Email*\par
+\fbox{\makebox[0.9\linewidth][l]{\color{gray}\scriptsize ryusei.example@gmail.com}}\par\vspace{3pt}
+Password*\par
+\fbox{\makebox[0.9\linewidth][l]{\color{gray}\scriptsize ••••••••••••}}\par\vspace{3pt}
+Username*\par
+\fbox{\makebox[0.9\linewidth][l]{\color{gray}\scriptsize shibayama-ryusei}}\par\vspace{6pt}
+\centering\colorbox{matcha}{\color{white}\makebox[0.5\linewidth]{Continue}}
+\end{winwin}
+\figcap{GitHub の登録画面（模式図）}
+\end{step}
+
+\begin{caution}[ユーザー名の決め方]
+ユーザー名は、URL（\code{github.com/ユーザー名}）にも、コミットの記録にも残ります。
+あとから変えると面倒なので、次の点に気をつけて決めてください。
+\begin{itemize}
+  \item 英小文字・数字・ハイフンだけで作る（例：\code{shibayama-ryusei}、\code{ryusei-s}）
+  \item 就職活動などで人に見せても恥ずかしくない名前にする
+\end{itemize}
+\end{caution}
+
+\begin{step}{2段階認証をオンにする}
+GitHub は2段階認証が必須です。登録後しばらくすると設定を求められるので、
+スマホの認証アプリ（Google Authenticator や Microsoft Authenticator など）で設定します。
+\textbf{リカバリーコードは必ず保存してください}。スマホをなくしたときに、これがないとアカウントに入れなくなります。
+\end{step}
+
+\begin{step}{学生向け特典（GitHub Education）を申請する}
+\url{https://education.github.com/} から、\textbf{keio.jp のメールアドレス}で学生認証を申請すると、
+有料機能の一部が無料になります。必須ではありませんが、通っておくと後で役立ちます。
+審査には数日かかることがあります。
+\end{step}
+
+\begin{step}{ユーザー名を先輩に伝える}
+\sheet{2-2}
+練習用のリポジトリにあなたを招待するため、GitHub のユーザー名を LINE で先輩に送ります。
+\end{step}
+
+\begin{step}{練習用リポジトリへの招待を承認する}
+\sheet{2-2}
+先輩が招待すると、GitHub に登録したメールアドレスに
+「yutomi141 invited you to yutomi141/rikotaikendo-practice」というメールが届きます。
+メールの \btn{View invitation} を押し、開いた画面で \btn{Accept invitation} を押します。
+メールが見つからないときは、\url{https://github.com/yutomi141/rikotaikendo-practice/invitations} を直接開いても承認できます。
+
+承認すると、このリポジトリにブランチを作ったり、PR を出したりできるようになります（第2巻から使います）。
+\end{step}
+
+\begin{caution}[招待には期限がある]
+GitHub の招待は、7日たつと無効になります。期限が切れたら、先輩にもう一度招待してもらってください。
+\end{caution}
+
+\section{Claude}
+
+Claude Pro にはすでに入っているので、ここでは2つの点を確認するだけです。
+
+\begin{step}{プランと使用量を確認する}
+\begin{enumerate}
+  \item \url{https://claude.ai} にログインし、左下のアカウント名から \menu{設定} を開きます。
+  \item \menu{使用量}（Usage）の画面で、いまの使用量を確認します。
+\end{enumerate}
+\end{step}
+
+\begin{tip}[Pro の使用量の仕組み]
+\begin{itemize}
+  \item 使用量には「5時間ごとの上限」と「週ごとの上限」があります。
+  \item \textbf{ブラウザやスマホで Claude とチャットした分と、Claude Code で使った分は、同じ枠から引かれます。}
+        開発を進めたい日は、チャットでの雑談を控えめにすると長持ちします。
+  \item 上限に達したら、リセットされるまで待ちます。待っている間にできることは第6章で紹介します。
+\end{itemize}
+\end{tip}
+
+\begin{caution}[追加の課金は押さない]
+上限に達すると、追加のクレジットを買うかどうか聞かれることがあります。
+\textbf{この教材では課金は一切不要です。}「購入」「有効にする」は押さず、リセットを待ってください。
+\end{caution}
+
+\begin{checklist}
+\begin{itemize}
+  \checkitem GitHub のアカウントを作り、2段階認証を設定した
+  \checkitem リカバリーコードを安全な場所に保存した
+  \checkitem GitHub のユーザー名を先輩に伝えた
+  \checkitem Claude の使用量の画面を開けた
+\end{itemize}
+\end{checklist}

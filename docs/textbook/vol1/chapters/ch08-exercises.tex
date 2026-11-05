@@ -1,0 +1,114 @@
+\section{練習問題}
+\sheet{8-13〜8-24}
+
+\code{\textasciitilde/dev/js-drill} フォルダを作り、問題ごとにファイル（\code{q01.js} など）を分けて解きます。
+1〜9 は、\code{node q01.js} のように Git Bash で実行して結果を確かめられます（Node.js は第3章で入れました）。
+10〜12 は HTML と組み合わせるので、ブラウザで確かめます。
+
+\begin{tip}[node で実行する]
+\begin{terminal}[Git Bash]
+$ cd ~/dev/js-drill
+$ node q01.js
+\end{terminal}
+\code{console.log} で出したものが、そのままターミナルに表示されます。
+\end{tip}
+
+\subsection*{基本}
+
+\begin{exercise}[1]{稽古の合計時間}
+\toanswer\par
+1回の稽古が120分、週に4回、前期が15週あります。前期の稽古時間の合計を「分」で計算して表示してください。
+数字はすべて \code{const} の変数に入れ、計算式の中に数字を直接書かないこと。
+\end{exercise}
+
+\begin{exercise}[1]{型を当てる}
+\toanswer\par
+次のそれぞれを \code{console.log} すると何が表示されるか、\textbf{先に予想を書いてから}実行してください。
+\begin{Piton}[language=code]
+console.log(typeof "4");
+console.log(typeof 4);
+console.log("4" + 4);
+console.log(4 + 4);
+console.log("4" === 4);
+console.log(Number("4") === 4);
+\end{Piton}
+\end{exercise}
+
+\begin{exercise}[1]{技の配列}
+\toanswer\par
+\code{["面", "小手", "胴"]} という配列を作り、次の順に操作して、そのたびに配列全体と長さを表示してください。
+(1) 最後に \code{"突き"} を足す　(2) 2番目の要素（\code{"小手"}）だけを表示する　(3) 最後の要素を、長さを使って取り出す
+\end{exercise}
+
+\begin{exercise}[1]{自分のプロフィール}
+\toanswer\par
+自分の名前・学年・学科・好きな技をオブジェクトにまとめ、テンプレートリテラルを使って
+「応用化学科2年の柴山です。好きな技は出小手です。」のような文を表示してください。
+\end{exercise}
+
+\begin{exercise}[2]{分を「時間と分」に直す関数}
+\toanswer\par
+分を受け取って、\code{"2時間30分"} のような文字列を返す関数 \code{formatMinutes} を作ってください。
+\code{formatMinutes(150)} → \code{"2時間30分"}、\code{formatMinutes(60)} → \code{"1時間0分"}、\code{formatMinutes(45)} → \code{"0時間45分"}。
+（ヒント：割り算の余りは \code{\%}、小数の切り捨ては \code{Math.floor}）
+余裕があれば、\code{"1時間"}、\code{"45分"} のように0の部分を省略するようにしてください。
+\end{exercise}
+
+\begin{exercise}[2]{上級生と下級生}
+\toanswer\par
+学年を受け取り、1年なら \code{"新入生"}、2年なら \code{"中堅"}、3年以上なら \code{"上級生"}、
+それ以外（0 や負の数）なら \code{"学年が正しくありません"} を返す関数を作り、5つの値で試してください。
+\end{exercise}
+
+\subsection*{配列の変換}
+
+以下の問題では、本章の \code{data.js} の \code{members} を、ファイルの先頭にコピーして使います。
+
+\begin{exercise}[2]{段位を持っている人}
+\toanswer\par
+段位が \code{"無"} でない部員だけを取り出し、その人数と名前を表示してください。
+\end{exercise}
+
+\begin{exercise}[2]{さん付けの名簿}
+\toanswer\par
+\code{map} を使って、\code{["青木 太郎さん（3年）", "井上 花子さん（3年）", ...]} という配列を作ってください。
+次に、\code{join} を使って、それを改行区切りの1つの文字列にして表示してください。
+\end{exercise}
+
+\begin{exercise}[3]{学年ごとの人数}
+\toanswer\par
+学年ごとの人数を数え、\code{\{ 1: 2, 2: 2, 3: 2 \}} のようなオブジェクトを作って表示してください。
+学年が増えても（4年がいても）コードを書き換えずに済むようにすること。
+\end{exercise}
+
+\subsection*{画面を動かす}
+
+\begin{exercise}[2]{素振りカウンター}
+\toanswer\par
+「素振り +1」ボタンと「リセット」ボタン、回数を表示する場所を作ってください。
+「+1」を押すたびに回数が1ずつ増え、100回になったら文字の色が朱色に変わるようにします。
+（ヒント：色は JavaScript で直接変えず、CSS の class を付け外しする）
+\end{exercise}
+
+\begin{exercise}[3]{名前で検索する}
+\toanswer\par
+本章の部員紹介に、名前の検索欄（\code{<input type="text">}）を足してください。
+文字を打つたびに、その文字を名前に含む部員だけが表示されるようにします。
+（ヒント：\code{input} イベントと、文字列の \code{includes}）
+\end{exercise}
+
+\begin{exercise}[3]{バグを直す}
+\toanswer\par
+次のコードは、2年生の名前だけを画面に表示するつもりで書かれていますが、\textbf{バグが3つ}あります。
+コンソールのエラーを読みながら、すべて直してください。直した理由もそれぞれ1行で書きます。
+\begin{filebox}{q12.js}
+\begin{Piton}[language=code]
+const list = document.querySelector(".member-lsit");
+const grade = "2";
+
+const second = members.filter((member) => member.grade === grade);
+
+list.innerHTML = second.map((member) => `<li>${member.nmae}</li>`).join("");
+\end{Piton}
+\end{filebox}
+\end{exercise}

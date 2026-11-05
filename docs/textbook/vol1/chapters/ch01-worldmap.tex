@@ -1,0 +1,173 @@
+\chapter{Web の世界地図}
+\sheet{1-1〜1-3}
+
+道具をそろえる前に、これから作るものの全体像を見ておきます。
+細かい言葉は覚えなくて大丈夫です。この章は、迷ったときに戻ってくる「地図」として使ってください。
+
+\section{Web ページが表示されるまで}
+
+ブラウザに \code{https://rikotaikendo.jimdofree.com} と打ち込んでから、ページが表示されるまでに起きていることは、次の図の通りです。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\small,
+  box/.style={draw=kon,rounded corners=3pt,minimum width=3.2cm,minimum height=2.2cm,align=center,fill=white},
+  arr/.style={-{Stealth[length=3mm]},thick}]
+  \node[box] (b) {\faLaptop\\[2pt]\textbf{ブラウザ}\\{\scriptsize あなたの PC}};
+  \node[box,right=6.6cm of b] (s) {\faServer\\[2pt]\textbf{サーバー}\\{\scriptsize インターネットの向こう}};
+  \draw[arr,kon] ([yshift=4mm]b.east) -- node[above,font=\scriptsize]{① ページをください（リクエスト）} ([yshift=4mm]s.west);
+  \draw[arr,shu] ([yshift=-4mm]s.west) -- node[below,font=\scriptsize,align=center]{② ファイル一式を返す（レスポンス）} ([yshift=-4mm]b.east);
+  \node[below=4mm of b,font=\scriptsize,align=center,text width=4cm] {③ 受け取ったファイルを組み立てて画面に描く};
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+  \item \term{ブラウザ}：Chrome や Edge のこと。受け取ったファイルを読んで画面を描きます。
+  \item \term{サーバー}：ページの元になるファイルを置いておき、頼まれたら返すコンピュータです。
+  \item \term{リクエスト}と\term{レスポンス}：「ください」と「どうぞ」のやりとりです。Web の通信はすべてこれの繰り返しです。
+\end{itemize}
+
+ブラウザが受け取るファイルは、主に次の3種類です。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{l l X}
+\toprule
+ファイル & 役割 & たとえると \\
+\midrule
+\textbf{HTML} & 何が書いてあるか（文章・見出し・画像の場所） & 家の骨組み \\
+\textbf{CSS} & どう見せるか（色・大きさ・配置） & 内装・ペンキ \\
+\textbf{JavaScript} & どう動くか（クリックしたら開く、絞り込む） & 電気・スイッチ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+第1巻の第7章で HTML と CSS を、第8章で JavaScript を書きます。
+
+\section{フロントエンド・バックエンド・データベース}
+
+部のサイトには、ニュースや大会結果を部員が更新できる「管理画面」があります。
+更新された内容はどこかに保存しておかなければなりません。
+保存先が\term{データベース}（DB）です。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\small,
+  layer/.style={draw,rounded corners=3pt,minimum width=3.6cm,minimum height=1.6cm,align=center},
+  arr/.style={{Stealth[length=2.5mm]}-{Stealth[length=2.5mm]},thick,gray}]
+  \node[layer,draw=kon,fill=kon!6] (f) {\textbf{フロントエンド}\\{\scriptsize ブラウザで動く部分}\\{\scriptsize 見た目・操作}};
+  \node[layer,draw=kincha,fill=kincha!8,right=1.6cm of f] (b) {\textbf{バックエンド}\\{\scriptsize サーバーで動く部分}\\{\scriptsize 計算・権限チェック}};
+  \node[layer,draw=matcha,fill=matcha!8,right=1.6cm of b] (d) {\textbf{データベース}\\{\scriptsize データの保管庫}\\{\scriptsize 部員・ニュース・結果}};
+  \draw[arr] (f)--(b); \draw[arr] (b)--(d);
+  \node[below=2mm of f,font=\scriptsize] {第1〜2巻};
+  \node[below=2mm of b,font=\scriptsize] {第2〜4巻};
+  \node[below=2mm of d,font=\scriptsize] {第3〜4巻};
+\end{tikzpicture}
+\end{center}
+
+\begin{tip}[なぜバックエンドを挟むのか]
+ブラウザから直接データベースを書き換えられると、誰でも部員名簿を消せてしまいます。
+そこで「この人は管理者か？」を確かめる係が必要になります。それがバックエンドの大事な仕事です。
+第4巻で、この「確かめる係」を自分で作ります。
+\end{tip}
+
+\section{部のサイトの構成}
+
+本番の \code{rikotaikendo-web} は、次のような部品の組み合わせでできています。
+すべてを今理解する必要はありません。第6巻を終えたとき、この図のどの部品についても説明できるようになっていればゴールです。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\scriptsize,
+  svc/.style={draw,rounded corners=3pt,minimum width=2.7cm,minimum height=1.15cm,align=center,fill=white},
+  arr/.style={-{Stealth[length=2mm]},thick,gray!70}]
+  \node[svc,draw=gray] (user) {\faUsers\ 訪問者\\新入生・部員・OB};
+  \node[svc,draw=gray,below=1.2cm of user] (admin) {\faUserCog\ 管理者\\主務など};
+  \node[svc,draw=kon,very thick,right=1.4cm of $(user)!0.5!(admin)$,minimum height=2.6cm,minimum width=3.2cm] (next)
+    {\textbf{Next.js アプリ}\\[2pt]公開ページ\\管理画面\\[2pt]{\color{gray}置き場所：Vercel}};
+  \node[svc,draw=matcha,right=1.4cm of next,yshift=1.3cm] (db) {\textbf{Supabase}\\DB・ログイン・画像};
+  \node[svc,draw=kincha,right=1.4cm of next] (mail) {\textbf{Resend}\\問い合わせメール};
+  \node[svc,draw=shu,right=1.4cm of next,yshift=-1.3cm] (google) {\textbf{Google}\\ログイン（OAuth）};
+  \node[svc,draw=gray,above=0.9cm of next] (gh) {\faGithub\ \textbf{GitHub}\\コードの保管庫};
+  \draw[arr] (user) -- (next); \draw[arr] (admin) -- (next);
+  \draw[arr] (next) -- (db); \draw[arr] (next) -- (mail); \draw[arr] (next) -- (google);
+  \draw[arr,dashed] (gh) -- node[right]{push すると自動で公開} (next);
+\end{tikzpicture}
+\end{center}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{l X l}
+\toprule
+部品 & 何をしているか & 学ぶ巻 \\
+\midrule
+GitHub & コードを保管し、変更の履歴を残す。チームでの共同作業の場 & 第1巻〜 \\
+Next.js & ページを作る仕組み（フレームワーク） & 第2巻 \\
+Vercel & Next.js のアプリをインターネットに公開する場所 & 第3巻 \\
+Supabase & データベース、ログイン、画像の保存をまとめて提供するサービス & 第3〜4巻 \\
+Google OAuth & 「Google でログイン」の仕組み & 第4巻 \\
+Resend & 問い合わせフォームからメールを送るサービス & 第5巻 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{字幕アプリの構成}
+
+すでに運用で使っている字幕アプリも、ほとんど同じ部品でできています。
+違うのは、\textbf{重い動画処理を GitHub Actions に任せている}点です。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\scriptsize,
+  st/.style={draw=kon,rounded corners=3pt,minimum width=2.15cm,minimum height=1.25cm,align=center,fill=white,text width=2.05cm},
+  arr/.style={-{Stealth[length=2mm]},thick,kon!70}]
+  \node[st] (a) {① 試合情報を入力して動画を選ぶ\\{\color{gray}ブラウザ}};
+  \node[st,right=4mm of a] (b) {② 動画を一時保存\\{\color{gray}Google Drive}};
+  \node[st,right=4mm of b] (c) {③ 処理を依頼\\{\color{gray}GitHub Actions}};
+  \node[st,right=4mm of c] (d) {④ 字幕を焼き込む\\{\color{gray}FFmpeg}};
+  \node[st,below=8mm of d] (e) {⑤ 完了を知らせる\\{\color{gray}Webhook}};
+  \node[st,left=4mm of e] (f) {⑥ 状態を「完了」に\\{\color{gray}Supabase}};
+  \node[st,left=4mm of f] (g) {⑦ YouTube に限定公開\\{\color{gray}Actions}};
+  \node[st,left=4mm of g] (h) {⑧ 一定時間後に動画を削除\\{\color{gray}定期実行}};
+  \draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d); \draw[arr] (d)--(e);
+  \draw[arr] (e)--(f); \draw[arr] (f)--(g); \draw[arr] (g)--(h);
+\end{tikzpicture}
+\end{center}
+
+10月の大会では、外部サーバーの不調で3本の処理が失敗しました。
+あれは、この図の③〜④のどこかで止まっていたということです。
+第6巻では、こうした失敗が「どこで」起きたのかを自分で突き止められるようにします。
+
+\begin{step}{先輩と一緒に、字幕アプリの裏側をたどる（定例で実施）}
+\sheet{1-3}
+定例の時間を1回使い、先輩の画面共有で、試合動画1本の処理を最初から最後まで追いかけます。
+見ながら、下の表の空欄を埋めてください。
+
+\medskip
+\begin{tabularx}{\linewidth}{l X}
+\toprule
+上の図の番号 & どの画面で確認できたか／何が表示されていたか \\
+\midrule
+① 入力 & \\[6pt]
+③ Actions の実行 & \\[6pt]
+④ FFmpeg のログ & \\[6pt]
+⑥ DB の状態 & \\[6pt]
+⑦ YouTube & \\[6pt]
+\bottomrule
+\end{tabularx}
+\end{step}
+
+\section{ローカルとクラウド}
+
+最後に、言葉を2つだけ覚えておきます。
+
+\begin{itemize}
+  \item \term{ローカル}：自分の PC の中のこと。作業中のファイルはまずここにあります。
+  \item \term{クラウド}（リモート）：インターネットの向こうにあるコンピュータのこと。GitHub や Vercel がこれにあたります。
+\end{itemize}
+
+開発は「ローカルで作って試す → クラウドに送って公開する」の繰り返しです。
+ローカルから GitHub に送る操作を \term{push}（プッシュ）と呼びます。第5章で実際にやります。
+
+\begin{checklist}
+\begin{itemize}
+  \checkitem ブラウザとサーバーのやりとりを、リクエスト・レスポンスという言葉を使って説明できる
+  \checkitem HTML・CSS・JavaScript の役割の違いを言える
+  \checkitem 管理画面とデータベースの間に、なぜバックエンドが必要なのかを言える
+  \checkitem 字幕アプリの処理が、どの順番でどのサービスを通るのかを図で示せる
+\end{itemize}
+\end{checklist}

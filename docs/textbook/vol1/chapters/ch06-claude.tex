@@ -1,0 +1,240 @@
+\chapter{Claude Code と組む}
+\sheet{6-1〜6-5}
+
+\section{Claude Code とは}
+
+\term{Claude Code} は、ターミナルの中で動く AI です。チャットの Claude と違うのは、次の2点です。
+
+\begin{itemize}
+  \item \textbf{あなたの PC のファイルを読んで、書き換えられる}
+  \item \textbf{コマンドを実行できる}（\code{git status} や \code{npm run dev} など）
+\end{itemize}
+
+つまり、「このフォルダのコードを読んで、ここを直して」と頼むと、本当に直してくれます。
+強力な分、\textbf{何をさせたのかを自分で把握しておく}ことが大事になります。
+
+\section{起動と終了}
+
+\begin{step}{練習用リポジトリで起動する}
+\begin{terminal}[Git Bash]
+$ cd ~/dev/git-practice
+$ claude
+\end{terminal}
+\textbf{Claude Code は、起動した場所のフォルダを「作業場所」として扱います。}
+必ず作業したいリポジトリに \code{cd} してから起動してください。
+ホームフォルダ（\code{\textasciitilde}）で起動すると、PC 中のファイルが対象になってしまいます。
+\end{step}
+
+最初に「このフォルダを信頼しますか」と聞かれたら、自分のリポジトリであることを確かめてから \code{Yes} を選びます。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{l X}
+\toprule
+入力 & 効果 \\
+\midrule
+普通の文章 & Claude への依頼 \\
+\code{/exit} & 終了する \\
+\code{/clear} & 会話をリセットする（\textbf{別の作業に移るときは必ず}） \\
+\code{/compact} & これまでの会話を要約して軽くする \\
+\code{/status} & ログイン状態や残りの使用量を見る \\
+\code{/help} & コマンドの一覧 \\
+\key{Esc} & Claude の作業を途中で止める \\
+\key{Esc} を2回 & 前の発言に戻ってやり直す \\
+\key{Shift}+\key{Tab} & 動作モードを切り替える（下で説明） \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{許可を求められたら}
+
+Claude Code はファイルを書き換える前や、コマンドを実行する前に、許可を求めてきます。
+
+\begin{wintermwin}[0.9\linewidth]{MINGW64:/c/Users/ryusei/dev/git-practice}
+Bash command\\[2pt]
+\hspace*{1em}git add README.md \&\& git commit -m "docs: 自己紹介を更新"\\[4pt]
+Do you want to proceed?\\
+{\color{kincha!80!white}> 1. Yes}\\
+\hspace*{0.75em}2. Yes, and don't ask again for git commit commands\\
+\hspace*{0.75em}3. No, and tell Claude what to do differently (esc)
+\end{wintermwin}
+
+\begin{caution}[許可する前に読む]
+\begin{itemize}
+  \item \textbf{何をしようとしているか分からないコマンドは、許可しない。}3（No）を選び、「このコマンドは何をするものか説明して」と聞く
+  \item \code{rm -rf}、\code{git push -f}、\code{git reset --hard} が出てきたら、必ず止まって確認する
+  \item 「2. 今後は聞かない」は、\code{git status} のような\textbf{読むだけのコマンド}にだけ使う
+\end{itemize}
+\end{caution}
+
+\key{Shift}+\key{Tab} で切り替えられる主なモードは、次の通りです。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{l X l}
+\toprule
+モード & 動き & この教材での使い方 \\
+\midrule
+通常 & 書き換えのたびに許可を求める & \textbf{基本はこれ} \\
+plan mode & 書き換えずに、計画だけ立てる & 大きめの作業の前に、方針を相談するとき \\
+accept edits & ファイルの書き換えは許可なしで進める & 第2巻以降、慣れてから \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{CLAUDE.md：Claude への申し送り}
+
+リポジトリの一番上に \code{CLAUDE.md} というファイルを置くと、Claude Code は起動するたびにそれを読みます。
+「このプロジェクトはこういうルールで作っている」という申し送り帳です。
+
+\begin{filebox}{CLAUDE.md（例：練習用リポジトリに置いてあるもの）}
+\begin{Verbatim}[fontsize=\small]
+# このリポジトリについて
+理工体剣道部サイトの練習版。作っているのは未経験から学習中の柴山。
+
+## Claude へのお願い
+- 答えのコードをいきなり全部書かず、まず方針と理由を説明する
+- 新しい用語が出てきたら、1行で意味を添える
+- 変更したら、どのファイルの何行目を、なぜ変えたかを最後にまとめる
+- git push、ファイルの削除、強制系のコマンドは実行前に必ず確認する
+\end{Verbatim}
+\end{filebox}
+
+練習用リポジトリには、先輩がこれを用意してあります。
+本番の \code{rikotaikendo-web} にも \code{CLAUDE.md} があり、技術構成やルールが書いてあります。
+第5巻で読みます。
+
+\begin{step}{練習用リポジトリを clone して、CLAUDE.md を読む}
+\sheet{6-3}
+GitHub にあるリポジトリを丸ごと手元にコピーすることを \term{clone}（クローン）といいます。
+\begin{terminal}[Git Bash]
+$ cd ~/dev
+$ git clone git@github.com:yutomi141/rikotaikendo-practice.git
+$ cd rikotaikendo-practice
+$ ls
+CLAUDE.md  README.md  docs
+$ cat CLAUDE.md
+\end{terminal}
+\code{CLAUDE.md} を読んで、Claude がこのリポジトリでどう振る舞うよう頼まれているかを確かめてください。
+次に、ここで Claude Code を起動して、教材について質問してみます。
+\begin{prompt}
+docs/textbook/vol1/chapters/ch05-git.tex を読んで、git add と git commit が分かれている理由を、剣道の稽古にたとえて説明して。
+\end{prompt}
+\textbf{このリポジトリの \code{main} には、直接 push できない設定になっています。}
+変更を加えるのは第2巻からで、そのときはブランチを切って PR を出します。
+教材が更新されたら、このフォルダで \code{git pull} すると最新になります。
+\end{step}
+
+\section{頼み方の5原則}
+
+\begin{enumerate}
+  \item \textbf{目的を書く}：何のためにやるのか（「新入生がスマホで見るので」）
+  \item \textbf{範囲を書く}：触ってよいファイル、触ってはいけないファイル
+  \item \textbf{完成の条件を書く}：どうなったら終わりか（「幅375pxで横にはみ出ない」）
+  \item \textbf{小さく頼む}：1回の依頼で1つのこと
+  \item \textbf{理由を聞く}：「なぜそうしたのか」まで答えてもらう
+\end{enumerate}
+
+\begin{badprompt}
+いい感じのトップページを作って
+\end{badprompt}
+
+\begin{prompt}
+index.html のヒーロー部分（\verb|<section class="hero">|）だけを直したい。\\
+目的：新入生がスマホで開いたとき、部の名前と「稽古見学歓迎」がすぐ目に入るようにしたい。\\
+範囲：index.html と style.css のヒーロー部分だけ。ほかのセクションは触らないで。\\
+完成の条件：幅 375px の画面で、文字が画像からはみ出さないこと。\\
+コードを書く前に、どう直すつもりかと、その理由を先に説明して。
+\end{prompt}
+
+\section{育てるサイクル}
+
+AI との開発は、次のサイクルの繰り返しです。
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\small,
+  st/.style={draw=kon,circle,minimum size=2.3cm,align=center,fill=white,text width=2cm},
+  arr/.style={-{Stealth[length=2.5mm]},very thick,kon!60}]
+  \node[st] (a) at (90:2.6) {① 頼む\\{\scriptsize 小さく・具体的に}};
+  \node[st] (b) at (0:2.6) {② 差分を読む\\{\scriptsize \texttt{git diff}}};
+  \node[st] (c) at (-90:2.6) {③ 確かめる\\{\scriptsize ブラウザで見る}};
+  \node[st] (d) at (180:2.6) {④ commit\\{\scriptsize 1つの意味で}};
+  \draw[arr] (a) to[bend left=20] (b); \draw[arr] (b) to[bend left=20] (c);
+  \draw[arr] (c) to[bend left=20] (d); \draw[arr] (d) to[bend left=20] (a);
+\end{tikzpicture}
+\end{center}
+
+\textbf{②と③を飛ばさない}ことが一番大事です。
+Claude は「できました」と言いますが、本当にできているかは、あなたが差分を読み、画面で確かめるまで分かりません。
+③でおかしかったら、commit せずに①に戻ります。
+うまくいったら④でセーブし、次の小さな依頼に進みます。
+
+\section{「教えてもらう」使い方}
+
+Claude Code は、作業させるだけでなく、先生としても使えます。
+
+\begin{prompt}[分からないことを聞く]
+いま git diff で出た「@@ -7,4 +7,4 @@」は何を意味している？ 1つずつ説明して。
+\end{prompt}
+
+\begin{prompt}[自分の理解を確かめる]
+CSS の position: absolute について、私はこう理解している：「親の要素を基準に、好きな位置に置ける」。\\
+この理解で合っている？ 足りない点や間違いがあれば、例を使って教えて。
+\end{prompt}
+
+\begin{prompt}[エラーを読む練習]
+このエラーの原因を教えて。ただし、直し方はまだ言わないで。私が先に直し方を考えるから、そのあと答え合わせして。\\
+（エラーメッセージを全文貼る）
+\end{prompt}
+
+\section{使用量を節約する}
+
+Pro の使用量は、Claude が読んだり書いたりする量に比例して減ります。
+
+\begin{itemize}
+  \item \textbf{作業が変わったら \code{/clear}}：前の作業の会話を引きずると、毎回それを読み直すので減りが早くなる
+  \item \textbf{範囲を絞る}：「このファイルの、この部分」と指定すると、余計なファイルを読まずに済む
+  \item \textbf{大きい作業は plan mode で方針を決めてから}：やり直しが減る
+  \item \textbf{簡単なことは自分でやる}：1文字の修正や \code{git status} を Claude に頼まない
+  \item \code{/status} で残量を確認する習慣をつける
+\end{itemize}
+
+\begin{tip}[上限に達した日にできること]
+上限に達しても、学習は止まりません。次のことを進めてください。
+\begin{itemize}
+  \item 教材を先に読み進める
+  \item 自分で書いたコード、Claude が書いたコードを読み直し、分からない行に印をつけておく（次に聞く）
+  \item 小さな修正を自分の手でやってみる
+  \item 腕だめしの「どこを、どう変えればよいか」のメモを先に書いておく
+\end{itemize}
+\end{tip}
+
+\section{AI と付き合う3つの掟}
+
+\begin{tcolorbox}[kwbase,colback=kon!4,colframe=kon,title={3つの掟}]
+\begin{enumerate}
+  \item \textbf{説明できないコードは、commit しない。}分からない行があれば、分かるまで聞く。
+  \item \textbf{秘密は渡さない。}秘密鍵、パスワード、本番の API キーは、Claude にも見せない。
+  \item \textbf{AI の「できました」を信じない。自分の目で確かめる。}
+\end{enumerate}
+\end{tcolorbox}
+
+\begin{step}{Claude Code で README を育てる}
+\sheet{6-5}
+\code{git-practice} で Claude Code を起動し、次のことを頼んでみましょう。
+\begin{enumerate}
+  \item 「README.md に『剣道部での役割』という見出しを足して、箇条書きで3つ書けるように枠だけ作って。中身は私が書く」
+  \item 許可を求められたら、内容を読んでから許可する
+  \item \code{/exit} で終了し、\code{git diff} で何が変わったかを自分で確認する
+  \item 中身を自分で書き、commit して push する
+\end{enumerate}
+\end{step}
+
+\begin{checklist}
+\begin{itemize}
+  \checkitem 作業したいリポジトリに \code{cd} してから Claude Code を起動している
+  \checkitem 許可を求められたとき、コマンドの意味を確かめてから選べる
+  \checkitem 頼み方の5原則に沿って依頼を書ける
+  \checkitem 育てるサイクル（頼む→差分→確かめる→commit）を回せる
+  \checkitem \code{/clear} を使う場面を言える
+  \checkitem 3つの掟を言える
+\end{itemize}
+\end{checklist}
