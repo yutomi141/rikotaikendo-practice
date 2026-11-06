@@ -48,7 +48,7 @@ PS C:\textbackslash Users\textbackslash ryusei>
 \begin{why}[なぜ Git Bash を使うのか]
 部のサイトを動かす Cloudflare のサーバーも、三角の Mac も、中身は同じ系統の仕組み（Unix 系）で動いています。
 Git Bash はその Unix 系と同じ命令が使えるので、ネットで見つけた手順や Claude が出すコマンドがそのまま通ります。
-大学の Git 演習の授業で使っているのも Git Bash です。
+三角が手元で打っているコマンドも、そのままあなたの PC で使えます。
 \end{why}
 
 見分け方は簡単で、\textbf{行の先頭が \texttt{PS} なら PowerShell、\texttt{\$} なら Git Bash} です。
@@ -190,7 +190,7 @@ core.autocrlf=input
 \section{SSH 鍵}
 
 GitHub にコードを送るとき、毎回パスワードを入力する代わりに「鍵」を使って本人確認をします。
-大学の Git 演習 第3回で扱った \term{公開鍵認証}と同じ仕組みです。
+この仕組みを\term{公開鍵認証}といいます。家の合鍵のように「同じ鍵を相手にも渡す」のではなく、相手には錠前（公開鍵）だけを渡し、鍵（秘密鍵）は自分の手元から出さないのがポイントです。
 
 \begin{center}
 \begin{tikzpicture}[font=\sffamily\small,
