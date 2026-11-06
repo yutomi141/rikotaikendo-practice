@@ -70,8 +70,9 @@
 
 \section{部のサイトの構成}
 
-本番の \code{rikotaikendo-web} は、次のような部品の組み合わせでできています。
-すべてを今理解する必要はありません。第6巻を終えたとき、この図のどの部品についても説明できるようになっていればゴールです。
+部の本番のサイトは、次のような部品の組み合わせで作ります（第5巻で、三角と一緒に組み立てます）。
+練習で作るものも、同じ部品でできています。
+すべてを今理解する必要はありません。第5巻を終えたとき、この図のどの部品についても説明できるようになっていればゴールです。
 
 \begin{center}
 \begin{tikzpicture}[font=\sffamily\scriptsize,
@@ -80,14 +81,14 @@
   \node[svc,draw=gray] (user) {\faUsers\ 訪問者\\新入生・部員・OB};
   \node[svc,draw=gray,below=1.2cm of user] (admin) {\faUserCog\ 管理者\\主務など};
   \node[svc,draw=kon,very thick,right=1.4cm of $(user)!0.5!(admin)$,minimum height=2.6cm,minimum width=3.2cm] (next)
-    {\textbf{Next.js アプリ}\\[2pt]公開ページ\\管理画面\\[2pt]{\color{gray}置き場所：Vercel}};
-  \node[svc,draw=matcha,right=1.4cm of next,yshift=1.3cm] (db) {\textbf{Supabase}\\DB・ログイン・画像};
-  \node[svc,draw=kincha,right=1.4cm of next] (mail) {\textbf{Resend}\\問い合わせメール};
-  \node[svc,draw=shu,right=1.4cm of next,yshift=-1.3cm] (google) {\textbf{Google}\\ログイン（OAuth）};
+    {\textbf{Worker}\\[2pt]公開ページ・管理画面\\API・ログイン\\[2pt]{\color{gray}置き場所：Cloudflare}};
+  \node[svc,draw=matcha,right=1.4cm of next,yshift=1.3cm] (db) {\textbf{D1}\\データベース};
+  \node[svc,draw=kincha,right=1.4cm of next] (mail) {\textbf{R2}\\画像・PDF の置き場};
+  \node[svc,draw=shu,right=1.4cm of next,yshift=-1.3cm] (google) {\textbf{メール送信}\\問い合わせの通知};
   \node[svc,draw=gray,above=0.9cm of next] (gh) {\faGithub\ \textbf{GitHub}\\コードの保管庫};
   \draw[arr] (user) -- (next); \draw[arr] (admin) -- (next);
   \draw[arr] (next) -- (db); \draw[arr] (next) -- (mail); \draw[arr] (next) -- (google);
-  \draw[arr,dashed] (gh) -- node[right]{push すると自動で公開} (next);
+  \draw[arr,dashed] (gh) -- node[right]{デプロイして公開} (next);
 \end{tikzpicture}
 \end{center}
 
@@ -97,19 +98,21 @@
 部品 & 何をしているか & 学ぶ巻 \\
 \midrule
 GitHub & コードを保管し、変更の履歴を残す。チームでの共同作業の場 & 第1巻〜 \\
-Next.js & ページを作る仕組み（フレームワーク） & 第2巻 \\
-Vercel & Next.js のアプリをインターネットに公開する場所 & 第3巻 \\
-Supabase & データベース、ログイン、画像の保存をまとめて提供するサービス & 第3〜4巻 \\
-Google OAuth & 「Google でログイン」の仕組み & 第4巻 \\
-Resend & 問い合わせフォームからメールを送るサービス & 第5巻 \\
+Cloudflare & サーバーやデータベースを借りられるサービス。以下の3つはすべてここにある & 第2巻〜 \\
+Worker & Cloudflare の上で動く小さなサーバーのプログラム。ページを返す、API に答える、ログインを確かめる & 第2〜4巻 \\
+D1 & データベース。お知らせ・大会結果・部員・FAQ を保存する & 第3巻 \\
+R2 & 画像や PDF の置き場 & 第5巻 \\
+メール送信 & 問い合わせが来たことを管理者に知らせる & 第5巻 \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \section{字幕アプリの構成}
 
-すでに運用で使っている字幕アプリも、ほとんど同じ部品でできています。
-違うのは、\textbf{重い動画処理を GitHub Actions に任せている}点です。
+すでに運用で使っている字幕アプリは、部のサイトとは別の部品でできています。
+画面は Next.js というフレームワーク、データベースとログインは Supabase、置き場所は Vercel です。
+そして、\textbf{重い動画処理を GitHub Actions に任せています}。
+部品の名前は違っても、「画面・サーバー・データベース」という役割分担は部のサイトと同じです。第6巻で読み比べます。
 
 \begin{center}
 \begin{tikzpicture}[font=\sffamily\scriptsize,
@@ -157,7 +160,7 @@ Resend & 問い合わせフォームからメールを送るサービス & 第5�
 
 \begin{itemize}
   \item \term{ローカル}：自分の PC の中のこと。作業中のファイルはまずここにあります。
-  \item \term{クラウド}（リモート）：インターネットの向こうにあるコンピュータのこと。GitHub や Vercel がこれにあたります。
+  \item \term{クラウド}（リモート）：インターネットの向こうにあるコンピュータのこと。GitHub や Cloudflare がこれにあたります。
 \end{itemize}
 
 開発は「ローカルで作って試す → クラウドに送って公開する」の繰り返しです。

@@ -22,5 +22,7 @@
 
 ## 技術スタック（第2巻以降で使う予定）
 
-- Next.js（App Router、サポート中のバージョン）+ TypeScript + Tailwind CSS
-- Supabase（DB・認証）、Vercel（公開）
+- 素の HTML / CSS / JavaScript（フレームワークは使わない。TypeScript も使わない）
+- Cloudflare Workers（サーバー）、D1（データベース・SQLite）、wrangler（開発用の道具）
+- セキュリティは IPA「安全なウェブサイトの作り方」改訂第7版とそのチェックリストを意識する。
+  ログイン・データベース・フォームまわりを書いたら、該当する章（SQL インジェクション 1.1、セッション管理 1.4、XSS 1.5、CSRF 1.6、アクセス制御 1.11 など）と照らし合わせて指摘する

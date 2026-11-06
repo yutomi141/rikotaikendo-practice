@@ -29,10 +29,10 @@
   now/.style={ph,fill=kon,text=white},
   arr/.style={-{Stealth[length=2.5mm]},thick,kon!70}]
   \node[now] (v1) {第1巻\\環境構築\\HTML/CSS/JS};
-  \node[ph,right=of v1] (v2) {第2巻\\Next.js で\\作り直す};
-  \node[ph,right=of v2] (v3) {第3巻\\DB と公開};
+  \node[ph,right=of v1] (v2) {第2巻\\サーバーに\\データを置く};
+  \node[ph,right=of v2] (v3) {第3巻\\DB と SQL};
   \node[ph,right=of v3] (v4) {第4巻\\ログインと\\管理画面};
-  \node[ph,below=8mm of v4] (v5) {第5巻\\障害対応と\\本番の保守};
+  \node[ph,below=8mm of v4] (v5) {第5巻\\障害対応と\\本番をつくる};
   \node[ph,left=of v5] (v6) {第6巻\\字幕アプリ\\の保守};
   \draw[arr] (v1)--(v2); \draw[arr] (v2)--(v3); \draw[arr] (v3)--(v4);
   \draw[arr] (v4)--(v5); \draw[arr] (v5)--(v6);
@@ -43,12 +43,11 @@
 第1巻では、開発に使う道具をそろえたあと、HTML・CSS・JavaScript だけで部のトップページを作ります。
 完成したら、インターネットに公開するところまで進めます。
 
-\begin{why}[なぜいきなり Next.js から始めないのか]
-本番のサイトは Next.js というフレームワークで作られています。
-ただ、Next.js は「HTML・CSS・JavaScript を楽に書くための仕組み」なので、
-土台の3つを知らないまま使うと、エラーが出たときに何が起きているのか分かりません。
-第1巻で素の HTML・CSS・JavaScript を一度書いておくと、第2巻で Next.js を使ったときに
-「あの面倒な作業を、これが代わりにやってくれているのか」と納得しながら進められます。
+\begin{why}[なぜ素の HTML・CSS・JavaScript から始めるのか]
+部の本番のサイトも、特別なフレームワークは使わず、素の HTML・CSS・JavaScript と、
+Cloudflare というサービスの上で動くサーバーの仕組みで作ります。
+つまり、第1巻で書く HTML・CSS・JavaScript は、そのまま本番のページの書き方です。
+第2巻以降は、そこに「データをサーバーに置く」「データベースに保存する」「ログインして管理画面から更新する」を順に足していきます。
 \end{why}
 
 \section{教材と練習用リポジトリの場所}
